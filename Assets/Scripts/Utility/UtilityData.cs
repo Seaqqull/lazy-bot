@@ -140,6 +140,57 @@ namespace LazyBot.Utility.Data
                 value.Map(istart.y, istop.y, ostart.y, ostop.y), 
                 value.Map(istart.z, istop.z, ostart.z, ostop.z));
         }
+
+        /// <summary>
+        /// Returns direction based on (y) angle.
+        /// </summary>
+        /// <param name="angleInDegrees">Angle in degrees.</param>
+        /// <param name="euler">Euler angle.</param>
+        /// <param name="rotation">Rotation value.</param>
+        /// <param name="angleIsGlobal">Is angle global.</param>
+        /// <returns></returns>
+        public static Vector3 DirFromAngleX(this float angleInDegrees, float euler = 0, float rotation = 0, bool angleIsGlobal = false)
+        {
+            if (!angleIsGlobal)
+            {
+                angleInDegrees += euler + rotation;
+            }
+            return new Vector3(0, Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
+        }
+
+        /// <summary>
+        /// Returns direction based on (y) angle.
+        /// </summary>
+        /// <param name="angleInDegrees">Angle in degrees.</param>
+        /// <param name="euler">Euler angle.</param>
+        /// <param name="rotation">Rotation value.</param>
+        /// <param name="angleIsGlobal">Is angle global.</param>
+        /// <returns></returns>
+        public static Vector3 DirFromAngleY(this float angleInDegrees, float euler = 0, float rotation = 0, bool angleIsGlobal = false)
+        {
+            if (!angleIsGlobal)
+            {
+                angleInDegrees += euler + rotation;
+            }
+            return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
+        }
+
+        /// <summary>
+        /// Returns direction based on (z) angle.
+        /// </summary>
+        /// <param name="angleInDegrees">Angle in degrees.</param>
+        /// <param name="euler">Euler angle.</param>
+        /// <param name="rotation">Rotation value.</param>
+        /// <param name="angleIsGlobal">Is angle global.</param>
+        /// <returns></returns>
+        public static Vector3 DirFromAngleZ(this float angleInDegrees, float euler = 0, float rotation = 0, bool angleIsGlobal = false)
+        {
+            if (!angleIsGlobal)
+            {
+                angleInDegrees += euler + rotation;
+            }
+            return new Vector3(Mathf.Cos(angleInDegrees * Mathf.Deg2Rad), Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0);
+        }
     }
 
     /// <summary>

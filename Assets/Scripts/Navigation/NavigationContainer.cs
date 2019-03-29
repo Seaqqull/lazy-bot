@@ -131,7 +131,7 @@ namespace LazyBot.Navigation
         }
 
         /// <summary>
-        /// Clears navigation and reset it's destination point to zero.
+        /// Clears navigation and reset its destination point to zero.
         /// </summary>
         public void Clear()
         {
@@ -357,7 +357,7 @@ namespace LazyBot.Navigation
         }
 
         /// <summary>
-        /// Calculates target's speed on path, based on it's position.
+        /// Calculates target's speed on path, based on its position.
         /// </summary>
         /// <param name="speed">Target's absolute speed.</param>
         public void CalculateSpeedOnPath(ref float speed)
@@ -369,7 +369,7 @@ namespace LazyBot.Navigation
         }
 
         /// <summary>
-        /// Calculates target's speed on point, based on it's position.
+        /// Calculates target's speed on point, based on its position.
         /// </summary>
         /// <param name="speed">Target's absolute speed.</param>
         /// <param name="index">Index of navigation point.</param>
@@ -385,7 +385,7 @@ namespace LazyBot.Navigation
         }
 
         /// <summary>
-        /// Calculates target's speed on path, based on it's position.
+        /// Calculates target's speed on path, based on its position.
         /// </summary>
         /// <param name="speed">Target's absolute speed.</param>
         /// <param name="position">Target's position.</param>
@@ -398,7 +398,7 @@ namespace LazyBot.Navigation
         }
 
         /// <summary>
-        /// Calculates target's speed on point, based on it's position.
+        /// Calculates target's speed on point, based on its position.
         /// </summary>
         /// <param name="speed">Target's absolute speed.</param>
         /// <param name="position">Target's position.</param>
