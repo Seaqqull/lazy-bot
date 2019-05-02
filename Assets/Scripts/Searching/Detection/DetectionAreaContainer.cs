@@ -3,9 +3,17 @@ using System;
 
 namespace LazyBot.Area.Detection
 {
+    /// <summary>
+    /// Used as container for storing/accessing detection areas.
+    /// </summary>
     public class DetectionAreaContainer : MonoBehaviour
     {
-        private DetectionArea[] m_tracingAreas;
+        [SerializeField] private DetectionArea[] m_tracingAreas;
+
+        /// <summary>
+        /// Wether to load detection areas at startup.
+        /// </summary>
+        private bool m_isAutoLoad;
 
         public DetectionArea[] TracingAreas
         {
@@ -20,25 +28,57 @@ namespace LazyBot.Area.Detection
         }
 
 
-        void Awake()
+        private void Awake()
         {
-            m_tracingAreas = GetComponentsInChildren<DetectionArea>();
+            if (m_isAutoLoad)
+                m_tracingAreas = GetComponentsInChildren<DetectionArea>();
+        }
+
+        private void OnEnable()
+        {
+            SwitchAllAreas(true);
+        }
+
+        private void OnDisable()
+        {
+            SwitchAllAreas(false);
         }
 
 
-        public void SwitchAllAreas(bool isActive)
+        /// <summary>
+        /// Switches active state of all areas.
+        /// </summary>
+        /// <param name="isActive">activation state</param>
+        private void SwitchAllAreas(bool isActive)
         {
+            if (!enabled) return;
+
             for (int i = 0; i < m_tracingAreas.Length; i++)
                 m_tracingAreas[i].enabled = isActive;
         }        
 
+
+        /// <summary>
+        /// Stitches activation state of specific area.
+        /// </summary>
+        /// <param name="index">index of area</param>
+        /// <param name="isActive">activation state</param>
         public void SwitchArea(int index, bool isActive)
         {
+            if (!enabled) return;
+
             m_tracingAreas[index].enabled = isActive;
         }
 
+        /// <summary>
+        /// Stitches activation state of specific area.
+        /// </summary>
+        /// <param name="name">name of area</param>
+        /// <param name="isActive">activation state</param>
         public void SwitchArea(string name, bool isActive)
         {
+            if (!enabled) return;
+
             for (int i = 0; i < m_tracingAreas.Length; i++)
                 if (m_tracingAreas[i].Name == name)
                 {
@@ -48,6 +88,11 @@ namespace LazyBot.Area.Detection
         }
 
 
+        /// <summary>
+        /// Returns position of specific area in scene.
+        /// </summary>
+        /// <param name="index">index of area</param>
+        /// <returns>Position in scene</returns>
         public Transform GetPointTransform(int index)
         {
             if (index >= m_tracingAreas.Length && index < 0)

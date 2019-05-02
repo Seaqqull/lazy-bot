@@ -525,9 +525,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1121714424}
+  - component: {fileID: 1121714429}
+  - component: {fileID: 1121714428}
   - component: {fileID: 1121714423}
-  - component: {fileID: 1121714426}
   - component: {fileID: 1121714425}
+  - component: {fileID: 1121714426}
   - component: {fileID: 1121714427}
   m_Layer: 0
   m_Name: GameObject
@@ -550,8 +552,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ownerTransform: {fileID: 0}
   m_points:
-  - m_type: 0
-    m_action: 0
+  - m_type: 1
+    m_action: 1
     m_priority: 0
     m_point: {fileID: 1042096299714369614}
     m_transferDelay: 0
@@ -560,18 +562,18 @@ MonoBehaviour:
     m_movementSpeed: 1
     m_accuracyRadius: 1
     m_impactRadius: 2
-  - m_type: 0
-    m_action: 0
+  - m_type: 1
+    m_action: 2
     m_priority: 0
     m_point: {fileID: 150881314}
-    m_transferDelay: 0
+    m_transferDelay: 3
     m_minImpactSpeed: 1
     m_animationSpeed: 1
     m_movementSpeed: 1
     m_accuracyRadius: 1
     m_impactRadius: 2
-  - m_type: 0
-    m_action: 0
+  - m_type: 1
+    m_action: 1
     m_priority: 0
     m_point: {fileID: 471915861}
     m_transferDelay: 0
@@ -778,6 +780,95 @@ MonoBehaviour:
       m_Bits: 1024
     m_enemyTags:
     - Enemy
+--- !u!114 &1121714428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121714422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8c3533a135aa444288623f983bf1858, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_activeState: 0
+  m_pathUpdateDelay: 0
+  m_states:
+  - m_priority: 0
+    m_isBlockingOnSleep: 0
+    m_isBlocking: 0
+    m_checkOnActive:
+      m_values: 2/1/0/-1
+    m_state: {fileID: 11400000, guid: 855a80e90643d58408b40384d34bf7cf, type: 2}
+  m_angularSpeed: 90
+  m_maxMovementSpeed: 5
+--- !u!114 &1121714429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121714422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09eb105d6fbd7e54c891e129e1ccf6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_health:
+    m_isLock: 0
+    m_isUnlimited: 0
+    m_isRegenerate: 1
+    m_value: 0
+    m_valueStart: 0
+    m_valueRegenerateRate: 0
+    m_valueLow: 0
+    m_valueMax: 0
+    m_valueMin: 0
+    m_slider: {fileID: 0}
+  m_stamina:
+    m_isLock: 0
+    m_isUnlimited: 0
+    m_isRegenerate: 1
+    m_value: 0
+    m_valueStart: 0
+    m_valueRegenerateRate: 0
+    m_valueLow: 0
+    m_valueMax: 0
+    m_valueMin: 0
+    m_slider: {fileID: 0}
+  m_trackingPoint:
+    m_type: 0
+    m_action: 0
+    m_priority: 0
+    m_point: {fileID: 0}
+    m_transferDelay: 0
+    m_minImpactSpeed: 0
+    m_animationSpeed: 0
+    m_movementSpeed: 0
+    m_accuracyRadius: 0
+    m_impactRadius: 0
+  m_onDamage:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  m_onDeath:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1121714428}
+        m_MethodName: Death
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &1589007042
 GameObject:
   m_ObjectHideFlags: 0
@@ -789,6 +880,7 @@ GameObject:
   - component: {fileID: 1589007044}
   - component: {fileID: 1589007043}
   - component: {fileID: 1589007045}
+  - component: {fileID: 1589007046}
   m_Layer: 10
   m_Name: GameObject (1)
   m_TagString: Enemy
@@ -842,6 +934,72 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1589007046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1589007042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09eb105d6fbd7e54c891e129e1ccf6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_health:
+    m_isLock: 0
+    m_isUnlimited: 0
+    m_isRegenerate: 1
+    m_value: 0
+    m_valueStart: 0
+    m_valueRegenerateRate: 0
+    m_valueLow: 0
+    m_valueMax: 0
+    m_valueMin: 0
+    m_slider: {fileID: 0}
+  m_stamina:
+    m_isLock: 0
+    m_isUnlimited: 0
+    m_isRegenerate: 1
+    m_value: 0
+    m_valueStart: 0
+    m_valueRegenerateRate: 0
+    m_valueLow: 0
+    m_valueMax: 0
+    m_valueMin: 0
+    m_slider: {fileID: 0}
+  m_trackingPoint:
+    m_type: 0
+    m_action: 0
+    m_priority: 0
+    m_point: {fileID: 0}
+    m_transferDelay: 0
+    m_minImpactSpeed: 0
+    m_animationSpeed: 0
+    m_movementSpeed: 0
+    m_accuracyRadius: 0
+    m_impactRadius: 0
+  m_onDamage:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  m_onDeath:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: Death
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &1042096299714369613
 PrefabInstance:
   m_ObjectHideFlags: 0

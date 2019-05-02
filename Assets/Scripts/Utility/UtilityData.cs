@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using System.Linq;
 using UnityEngine;
 
 namespace LazyBot.Utility.Data
@@ -103,6 +104,25 @@ namespace LazyBot.Utility.Data
             return data;
         }
 
+    }
+
+    /// <summary>
+    /// Integer extension class.
+    /// </summary>
+    public static class IntHelper
+    {
+        /// <summary>
+        /// Returns a specified number raised to the specified power.
+        /// </summary>
+        /// <param name="bas">Number to be raised to a power.</param>
+        /// <param name="exp">Number that specifies a power.</param>
+        /// <returns>Raised number.</returns>
+        public static int Pow(this int bas, int exp)
+        {
+            return Enumerable
+                  .Repeat(bas, exp)
+                  .Aggregate(1, (a, b) => a * b);
+        }
     }
 
     /// <summary>
