@@ -15,6 +15,7 @@ namespace LazyBot.Area.Searching
         public class TargetUpdateEvent : UnityEvent<SearchingArea, LazyBot.Area.Detection.DetectionArea> { }
 
         [SerializeField] private LazyBot.Area.Data.ObservationType m_type = LazyBot.Area.Data.ObservationType.Undefined;
+        [SerializeField] private LazyBot.Target.TargetTypeSO m_targetType;
 
         /// <summary>
         /// Update frequency of target detection.
@@ -38,6 +39,10 @@ namespace LazyBot.Area.Searching
         private static uint m_idCounter = 0;
         private uint m_id;
 
+        public LazyBot.Target.TargetTypeSO TargetType
+        {
+            get { return this.m_targetType; }
+        }
         public LazyBot.Area.Data.ObservationType Type
         {
             get { return this.m_type; }
