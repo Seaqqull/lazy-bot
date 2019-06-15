@@ -42,6 +42,10 @@ namespace LazyBot.Entity
         {
             get { return this.m_navigationPath; }
         }
+        public LazyBot.Entity.EntityBehaviour Behaviour
+        {
+            get { return this.m_behaviour; }
+        }
         public int NavigationIndex
         {
             get { return this.m_navigationIndex; }
@@ -136,7 +140,7 @@ namespace LazyBot.Entity
                 m_stateOrder[i].X = i;
                 m_stateOrder[i].Y = m_states[i].Priority;
 
-                m_states[i].Id = i;
+                m_states[i].Id = (uint)i;
 
                 m_states[i].CheckOn.Remove(i);
                 m_states[i].CheckOn.ValidatesValues(0, m_states.Length - 1);

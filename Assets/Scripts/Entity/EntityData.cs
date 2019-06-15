@@ -254,7 +254,7 @@ namespace LazyBot.Entity.Data
         /// <summary>
         /// Values as mask of bit set.
         /// </summary>
-        private int m_mask;
+        private ulong m_mask;
 
         /// <summary>
         /// All possible values.
@@ -266,7 +266,7 @@ namespace LazyBot.Entity.Data
         /// <summary>
         /// Values as mask of bit set.
         /// </summary>
-        public int Mask
+        public ulong Mask
         {
             get { return this.m_mask; }
         }
@@ -304,7 +304,7 @@ namespace LazyBot.Entity.Data
         /// Bakes possible values in integer mask.
         /// </summary>
         /// <returns>Integer mask.</returns>
-        public int Bake()
+        public ulong Bake()
         {
             string[] valuesS = Validate();
             m_values = string.Join(m_separator.ToString(), valuesS);
@@ -315,7 +315,7 @@ namespace LazyBot.Entity.Data
 
             for (int i = 0; i < valuesI.Length; i++)
             {
-                m_mask |= LazyBot.Utility.Data.IntHelper.Pow(2, valuesI[i]);
+                m_mask |= (uint)Mathf.Pow(2, valuesI[i]);
             }
 
             return m_mask;
@@ -402,7 +402,20 @@ namespace LazyBot.Entity.Data
         {
             if (valueObj.m_mask == 0) return false;
 
-            return ((valueObj.m_mask & LazyBot.Utility.Data.IntHelper.Pow(2, value)) == 0);
+            return ((valueObj.m_mask & (uint)Mathf.Pow(2, value)) == 0);
+        }
+
+        /// <summary>
+        /// Compares object's mask with specific value.
+        /// </summary>
+        /// <param name="valueObj">Object to be compared.</param>
+        /// <param name="value">Value used to compare.</param>
+        /// <returns></returns>
+        public static bool operator &(IntMask valueObj, uint value)
+        {
+            if (valueObj.m_mask == 0) return false;
+
+            return ((valueObj.m_mask & (uint)Mathf.Pow(2, value)) == 0);
         }
     }
 
@@ -412,7 +425,7 @@ namespace LazyBot.Entity.Data
     [System.Serializable]
     public class EntityState
     {
-        /*[SerializeField]*/ private int m_id;
+        /*[SerializeField]*/ private uint m_id;
         [SerializeField] [Range(0, ushort.MaxValue)] private int m_priority;
         /// <summary>
         /// Is state can be ended, when state in sleep mode.
@@ -472,7 +485,7 @@ namespace LazyBot.Entity.Data
         {
             get { return this.m_priority; }
         }
-        public int Id
+        public uint Id
         {
             get { return this.m_id; }
             set { this.m_id = value; }
