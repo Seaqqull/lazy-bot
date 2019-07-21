@@ -14,6 +14,8 @@ namespace LazyBot.Area.Detection
 
         [SerializeField] protected Data.HitAreaState m_state = Data.HitAreaState.Enabled;
 
+        [SerializeField] protected LazyBot.Entity.EntityController m_owner;
+
         [SerializeField] [Range(0, ushort.MaxValue)] protected float m_damageMultiplier = 1.0f;
 
         protected Func<Vector3, float> m_onSound = delegate { return 0; };
@@ -63,6 +65,18 @@ namespace LazyBot.Area.Detection
                 return this.m_colider;
             }
         }
+        public uint OwnerId
+        {
+            get
+            {
+                if (m_owner) return m_owner.Behaviour.Id;
+
+#if UNITY_EDITOR
+                Debug.LogError("Owner not defined");
+#endif
+                return 0;
+            }
+        }
         public string Name
         {
             get
@@ -79,6 +93,7 @@ namespace LazyBot.Area.Detection
         public Color m_gizmoColorActive = Color.blue;
         public Color m_gizmoColorFound = Color.red;
         public float m_gizmoSize = 0.1f;
+
 
         protected virtual void Awake()
         {

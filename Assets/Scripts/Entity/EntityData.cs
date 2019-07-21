@@ -1,7 +1,10 @@
-﻿using UnityEngine.UI;
+﻿using System.Collections.Generic;
+using System.Collections;
+using UnityEngine.UI;
 using UnityEngine;
 using System.Linq;
 using System;
+
 
 namespace LazyBot.Entity.Data
 {
@@ -240,7 +243,7 @@ namespace LazyBot.Entity.Data
     /// Integer mask.
     /// </summary>
     [System.Serializable]
-    public class IntMask
+    public class IntMask : IEnumerable<uint>
     {
         /// <summary>
         /// Represents all possible values.
@@ -290,7 +293,7 @@ namespace LazyBot.Entity.Data
         /// </summary>
         /// <param name="number">New value.</param>
         /// <returns>Validated values.</returns>
-        private string[] Validate(int number)
+        private string[] Validate(uint number)
         {
             string[] values = (m_values.Trim(new char[] { ' ', m_separator }) + m_separator + number.ToString()).
                 Trim(new char[] { ' ', m_separator }).Split(m_separator).Distinct().ToArray();
@@ -325,7 +328,7 @@ namespace LazyBot.Entity.Data
         /// Adds new number as possible.
         /// </summary>
         /// <param name="number">New value.</param>
-        public void Add(int number)
+        public void Add(uint number)
         {
             string[] values = Validate(number);
             m_values = string.Join(m_separator.ToString(), values);
@@ -344,7 +347,7 @@ namespace LazyBot.Entity.Data
         /// Removes value from possible.
         /// </summary>
         /// <param name="number"></param>
-        public void Remove(int number)
+        public void Remove(uint number)
         {
             string[] valuesS = Validate();
             int[] valuesI = Array.ConvertAll<string, int>(valuesS, int.Parse);
@@ -357,7 +360,7 @@ namespace LazyBot.Entity.Data
         /// Validate values on its minimum bound.
         /// </summary>
         /// <param name="min">Minimum bound of value.</param>
-        public void ValidatesValuesOnMin(int min)
+        public void ValidatesValuesOnMin(uint min)
         {
             string[] values = Validate();
             values = values.Where((item) => int.Parse(item) >= min).ToArray();
@@ -369,7 +372,7 @@ namespace LazyBot.Entity.Data
         /// Validate values on its maximum bound.
         /// </summary>
         /// <param name="max">Maximum bound of value.</param>
-        public void ValidatesValuesOnMax(int max)
+        public void ValidatesValuesOnMax(uint max)
         {
             string[] values = Validate();
             values = values.Where((item) => int.Parse(item) <= max).ToArray();
@@ -382,13 +385,30 @@ namespace LazyBot.Entity.Data
         /// </summary>
         /// <param name="min">Minimum bound of value.</param>
         /// <param name="max">Maximum bound of value.</param>
-        public void ValidatesValues(int min, int max)
+        public void ValidatesValues(uint min, uint max)
         {
             string[] values = Validate();
             values = values.Where((item) => int.Parse(item) >= min).ToArray();
             values = values.Where((item) => int.Parse(item) <= max).ToArray();
 
             m_values = string.Join(m_separator.ToString(), values);
+        }
+
+
+        public IEnumerator<uint> GetEnumerator()
+        {
+            string[] valuesS = Validate();
+            m_values = string.Join(m_separator.ToString(), valuesS);
+
+            uint[] valuesI = Array.ConvertAll<string, uint>(valuesS, uint.Parse);
+
+            foreach (var item in valuesI)
+                yield return item;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
 

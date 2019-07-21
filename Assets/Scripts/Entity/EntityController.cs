@@ -20,24 +20,22 @@ namespace LazyBot.Entity
         /// Period of destination path update.
         /// </summary>
         [SerializeField] [Range(0, ushort.MaxValue)] protected float m_pathUpdateDelay;
-
-        [SerializeField] LazyBot.Entity.Data.EntityState[] m_states;
+        [SerializeField] protected LazyBot.Entity.Data.EntityState[] m_states;
 
         protected LazyBot.Navigation.NavigationContainer m_navigationPath;
-        protected LazyBot.Navigation.NavigationContainer m_targets;
+        protected LazyBot.Target.Data.TargetInfo m_targets;
 
         protected LazyBot.Audio.AudioContainer m_audioContainer;
         protected EntityBehaviour m_behaviour;
 
         protected Coroutine m_sleepCoroutation;
-        protected Point[] m_stateOrder; // X - state index, Y - state priority
-        protected Transform m_transform;
         protected float m_timeSincePathUpdate;
+        protected Transform m_transform;
         protected int m_navigationIndex;
-        protected int m_targetIndex;
+        protected Point[] m_stateOrder; // X - state index, Y - state priority
         protected bool m_isSleep;
         protected bool m_isBlock; // Used in two cases: isBlock on sleep \ isBlock on state(sleep deactivated)
-        
+
         public LazyBot.Navigation.NavigationContainer NavigationPath
         {
             get { return this.m_navigationPath; }
@@ -45,6 +43,10 @@ namespace LazyBot.Entity
         public LazyBot.Entity.EntityBehaviour Behaviour
         {
             get { return this.m_behaviour; }
+        }
+        public LazyBot.Target.Data.TargetInfo Targets
+        {
+            get { return this.m_targets; }
         }
         public int NavigationIndex
         {
@@ -54,11 +56,6 @@ namespace LazyBot.Entity
         public Transform Transform
         {
             get { return this.m_transform; }
-        }
-        public int TargetIndex
-        {
-            get { return this.m_targetIndex; }
-            set { this.m_targetIndex = value; }
         }
         public bool IsBlocked
         {
@@ -74,7 +71,7 @@ namespace LazyBot.Entity
         protected virtual void Awake()
         {
             m_navigationPath = GetComponent<LazyBot.Navigation.NavigationContainer>();
-            m_targets = gameObject.AddComponent<LazyBot.Navigation.SimpleNavigation>();
+            m_targets = new LazyBot.Target.Data.TargetInfo();
 
             m_audioContainer = GetComponent<LazyBot.Audio.AudioContainer>();
             m_behaviour = GetComponent<EntityBehaviour>();            
@@ -84,6 +81,8 @@ namespace LazyBot.Entity
 
         protected virtual void Start()
         {
+            if (m_states.Length == 0) return;
+
             UpdateStates();
             OnStateChange();
 
@@ -92,7 +91,7 @@ namespace LazyBot.Entity
 
         protected virtual void Update()
         {
-            if (m_behaviour.IsDeath) return;
+            if ((m_behaviour.IsDeath) || (m_states.Length == 0)) return;
 
             m_timeSincePathUpdate += Time.deltaTime;
 
@@ -142,8 +141,8 @@ namespace LazyBot.Entity
 
                 m_states[i].Id = (uint)i;
 
-                m_states[i].CheckOn.Remove(i);
-                m_states[i].CheckOn.ValidatesValues(0, m_states.Length - 1);
+                m_states[i].CheckOn.Remove((uint)i);
+                m_states[i].CheckOn.ValidatesValues(0, (uint)(m_states.Length - 1));
 
                 m_states[i].CheckOn.Bake();
             }
@@ -155,7 +154,7 @@ namespace LazyBot.Entity
         protected virtual void OnStateChange()
         {
             ResetSleep();
-            m_isBlock = m_states[m_activeState].IsBlocking;            
+            m_isBlock = m_states[m_activeState].IsBlocking;
         }
 
 
@@ -277,6 +276,36 @@ namespace LazyBot.Entity
             );
         }
 
+        public void ClearTarget(LazyBot.Area.Searching.SearchingArea area)
+        {
+            if (area.TargetType == null) return;
+
+            if (m_targets.Data.ContainsKey(area.TargetType))
+                m_targets[area.TargetType].Erase(area.Id);
+        }
+
+        public void InitTargetContainer(LazyBot.Area.Searching.SearchingArea area)
+        {
+            if (area.TargetType == null) return;
+
+            if (!m_targets.Data.ContainsKey(area.TargetType))
+                m_targets.AddType(area.TargetType);
+
+            m_targets[area.TargetType].AddArea(area.Id);
+        }
+
+        public void AddTarget(LazyBot.Area.Searching.SearchingArea area, LazyBot.Area.Detection.DetectionArea detectionArea)
+        {
+            if (area.TargetType == null) return;
+
+            if (!m_targets.Data.ContainsKey(area.TargetType))
+                m_targets.AddType(area.TargetType);
+
+            if (area.TargetType.DataOnDetection)// Fill data
+                m_targets[area.TargetType].AddTarget(area.Id, 
+                    LazyBot.Manager.EntityManager.Instance.GetProperties(detectionArea.OwnerId, area.TargetType.Mask));
+            //else data will be filled on state execution
+        }
 
         /// <summary>
         /// Runs custom method after delay.

@@ -10,12 +10,12 @@ namespace LazyBot.Area.Searching
     public class SearchingArea : MonoBehaviour
     {
         [System.Serializable]
-        public class SearchingAreaDrawEvent : UnityEvent<SearchingArea> { }
+        public class SearchingAreaEvent : UnityEvent<SearchingArea> { }
         [System.Serializable]
         public class TargetUpdateEvent : UnityEvent<SearchingArea, LazyBot.Area.Detection.DetectionArea> { }
 
         [SerializeField] private LazyBot.Area.Data.ObservationType m_type = LazyBot.Area.Data.ObservationType.Undefined;
-        [SerializeField] private LazyBot.Target.TargetTypeSO m_targetType;
+        [SerializeField] private LazyBot.Target.Property.TargetTypeSO m_targetType;
 
         /// <summary>
         /// Update frequency of target detection.
@@ -23,9 +23,11 @@ namespace LazyBot.Area.Searching
         [SerializeField] private FloatReference m_updateRate;
         [SerializeField] [Range(0, ushort.MaxValue)] private ushort m_priority = 0;
 
-        [SerializeField] private DetectionValidatorSO[] m_onTargetDetection;        
-        [SerializeField] private SearchingAreaDrawEvent m_onDrawGizmo;
+        [SerializeField] private DetectionValidatorSO[] m_onTargetDetection;
+        [SerializeField] private SearchingAreaEvent m_onInit;
         [SerializeField] private TargetUpdateEvent m_onTargetUpdate;
+        [SerializeField] private SearchingAreaEvent m_onTargetClear;
+        [SerializeField] private SearchingAreaEvent m_onDrawGizmo;
 
         /// <summary>
         /// Area characteristics.
@@ -39,7 +41,7 @@ namespace LazyBot.Area.Searching
         private static uint m_idCounter = 0;
         private uint m_id;
 
-        public LazyBot.Target.TargetTypeSO TargetType
+        public LazyBot.Target.Property.TargetTypeSO TargetType
         {
             get { return this.m_targetType; }
         }
@@ -70,6 +72,17 @@ namespace LazyBot.Area.Searching
             m_id = m_idCounter++;
 
             m_data.Socket = m_data.Socket ?? this.transform;
+        }
+
+        private void Start()
+        {
+#if UNITY_EDITOR
+            if (m_targetType == null)
+            {
+                Debug.LogError("Target type empty!Need to set it to perform target updates.", gameObject);
+            }
+#endif
+            m_onInit.Invoke(this);
         }
 
         private void OnEnable()
@@ -114,8 +127,9 @@ namespace LazyBot.Area.Searching
             while (true)
             {
                 yield return new WaitForSeconds(delay);
-                
-                // some detection code
+
+                m_onTargetClear.Invoke(this);
+
                 for (int i = 0; i < m_data.EnemyTags.Length; i++)
                 {
                     GameObject[] targets = GameObject.FindGameObjectsWithTag(m_data.EnemyTags[i]);
@@ -128,7 +142,7 @@ namespace LazyBot.Area.Searching
                         for (k = 0; k < m_onTargetDetection.Length; k++)
                             if (!m_onTargetDetection[k].Validate(this, detectionArea)) break;
 
-                        if (k == m_onTargetDetection.Length)
+                        if ((k == m_onTargetDetection.Length) && (m_targetType != null))
                             m_onTargetUpdate.Invoke(this, detectionArea);
                     }
                 }

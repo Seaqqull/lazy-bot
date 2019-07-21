@@ -1,105 +1,176 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
+using System;
 
 namespace LazyBot.Target.Data
-{
-    [System.Flags]
-    public enum TargetProperty
+{    
+    using Target = Dictionary<uint, dynamic>;//<propertyId, targetData>
+
+    [System.Serializable]
+    public class PropertyContacts : IEquatable<PropertyContacts>
     {
-        Undefined = 0,
-        Transform = 1 << 0,
-        Health = 1 << 1,
-        Loudness = 1 << 2
+        public string Name;
+        public uint Id;
+
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode() ^ Name.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj as PropertyContacts);
+        }
+
+        public bool Equals(PropertyContacts other)
+        {
+            return (Id == other.Id);
+        }
     }
 
-    public class Target
+    public class TargetInfo
     {
-        private LazyBot.Area.Data.ObservationType m_observationType;
-        private Dictionary<TargetProperty, dynamic> m_properties;
-        private ushort m_priority;
-        private uint m_id;
-        
-        public LazyBot.Area.Data.ObservationType ObservationType
+        public class TargetContainer
         {
-            get { return this.m_observationType; }
+            private Dictionary<uint, List<Target>> m_targets;//<searchingAreaId, >
+
+            public Dictionary<uint, List<Target>> Targets
+            {
+                get
+                {
+                    return m_targets ??
+                        (m_targets = new Dictionary<uint, List<Target>>());
+                }
+            }
+
+
+            public void Erase(uint searchingAreaId)
+            {
+                if (!Targets.ContainsKey(searchingAreaId)) return;
+
+                m_targets.Remove(searchingAreaId);
+            }
+
+            public void AddArea(uint searchingAreaId)
+            {
+                if (!Targets.ContainsKey(searchingAreaId))
+                    m_targets.Add(searchingAreaId, new List<Target>());
+            }
+
+            public List<Target> Cut(uint searchingAreaId)
+            {
+                if (!Targets.ContainsKey(searchingAreaId)) return null;
+
+                List<Target> targets = m_targets[searchingAreaId];
+                m_targets.Remove(searchingAreaId);
+
+                return targets;
+            }
+
+            public List<Target> Get(uint searchingAreaId)
+            {
+                if (!Targets.ContainsKey(searchingAreaId)) return null;
+
+                return m_targets[searchingAreaId];
+            }
+
+            public List<Target> Remove(uint searchingAreaId)
+            {
+                if (!Targets.ContainsKey(searchingAreaId)) return null;
+
+                List<Target> targets = m_targets[searchingAreaId];
+                m_targets.Remove(searchingAreaId);
+
+                return targets;
+            }
+
+            public void Erase(uint searchingAreaId, int targetIndex)
+            {
+                if (!Targets.ContainsKey(searchingAreaId) ||
+                    targetIndex >= m_targets[searchingAreaId].Count) return;
+
+                m_targets[searchingAreaId].RemoveAt(targetIndex);
+            }
+
+            public Target Cut(uint searchingAreaId, int targetIndex)
+            {
+                if (!Targets.ContainsKey(searchingAreaId) ||
+                    targetIndex >= m_targets[searchingAreaId].Count) return null;
+
+                Target target = m_targets[searchingAreaId][targetIndex];
+                m_targets[searchingAreaId].RemoveAt(targetIndex);
+
+                return target;
+            }
+
+            public Target Get(uint searchingAreaId, int targetIndex)
+            {
+                if (!Targets.ContainsKey(searchingAreaId) ||
+                    targetIndex >= m_targets[searchingAreaId].Count) return null;
+
+                return m_targets[searchingAreaId][targetIndex];
+            }
+
+            public void AddTarget(uint searchingAreaId, Target target)
+            {
+                AddArea(searchingAreaId);
+
+                m_targets[searchingAreaId].Add(target);
+            }
+
+            public Target Remove(uint searchingAreaId, int targetIndex)
+            {
+                if (!Targets.ContainsKey(searchingAreaId) ||
+                    targetIndex >= m_targets[searchingAreaId].Count) return null;
+
+
+                Target target = m_targets[searchingAreaId][targetIndex];
+                m_targets[searchingAreaId].RemoveAt(targetIndex);
+
+                return target;
+            }
+
+            public void AddTarget(uint searchingAreaId, List<(uint, dynamic)> data)
+            {
+                AddArea(searchingAreaId);
+
+                Target newIndo = new Target();
+                foreach (var property in data)
+                {
+                    newIndo.Add(property.Item1, property.Item2);
+                }
+                m_targets[searchingAreaId].Add(newIndo);
+            }
+            
         }
-        public Dictionary<TargetProperty, dynamic> Properties
+        
+        private Dictionary<LazyBot.Target.Property.TargetTypeSO, TargetContainer> _data;
+
+        public Dictionary<LazyBot.Target.Property.TargetTypeSO, TargetContainer> Data
         {
             get
             {
-                return this.m_properties ?? 
-                    (this.m_properties = new Dictionary<TargetProperty, dynamic>());
+                return _data ??
+                    (_data = new Dictionary<Property.TargetTypeSO, TargetContainer>());
             }
         }
-        public ushort Priority
-        {
-            get { return this.m_priority; }
-        }
-        public uint Id
-        {
-            get { return this.m_id; }
-        }
 
-        public Target(uint id, ushort priority, LazyBot.Area.Data.ObservationType observationType)
-        {
-            m_observationType = observationType;
-            m_priority = priority;
-            m_id = id;            
-        }
-    }
 
-    public class TargetContainer
-    {
-        private LazyBot.Target.TargetTypeSO m_type;
-        private Dictionary<uint, List<Target>> m_targets;//SA id
-
-        public LazyBot.Target.TargetTypeSO Type
+        public TargetContainer this[LazyBot.Target.Property.TargetTypeSO key]
         {
-            get { return this.m_type; }
+            get
+            {
+                if (!Data.ContainsKey(key)) return null;
+                return Data[key];
+            }            
         }
 
 
-        public void Erase(uint searchingAreaId)
+        public void AddType(LazyBot.Target.Property.TargetTypeSO newType)
         {
-            if (!m_targets.ContainsKey(searchingAreaId)) return;
+            if (Data.ContainsKey(newType)) return;
 
-            m_targets.Remove(searchingAreaId);
-        }
-
-        public List<Target> Cut(uint searchingAreaId)
-        {
-            if (!m_targets.ContainsKey(searchingAreaId)) return null;
-
-            List<Target>  Targets = m_targets[searchingAreaId];
-            m_targets[searchingAreaId] = new List<Target>();
-
-            return Targets;
-        }
-
-        public List<Target> Get(uint searchingAreaId)
-        {
-            if (!m_targets.ContainsKey(searchingAreaId)) return null;
-
-            return m_targets[searchingAreaId];
-        }
-
-        public List<Target> Remove(uint searchingAreaId)
-        {
-            if (!m_targets.ContainsKey(searchingAreaId)) return null;
-
-            List<Target> Targets = m_targets[searchingAreaId];
-            m_targets.Remove(searchingAreaId);
-
-            return Targets;
-        }
-
-        public void Add(uint searchingAreaId, Target target)
-        {
-            if (!m_targets.ContainsKey(searchingAreaId))
-                m_targets.Add(searchingAreaId, new List<Target>());
-
-            m_targets[searchingAreaId].Add(target);
-        }
+            _data.Add(newType, new TargetContainer());
+        }        
     }
 }
