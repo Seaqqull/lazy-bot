@@ -395,6 +395,11 @@ namespace LazyBot.Entity.Data
         }
 
 
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
         public IEnumerator<uint> GetEnumerator()
         {
             string[] valuesS = Validate();
@@ -404,11 +409,6 @@ namespace LazyBot.Entity.Data
 
             foreach (var item in valuesI)
                 yield return item;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
 
 

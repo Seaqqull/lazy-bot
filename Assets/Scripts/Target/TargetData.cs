@@ -17,14 +17,18 @@ namespace LazyBot.Target.Data
             return Id.GetHashCode() ^ Name.GetHashCode();
         }
 
-        public override bool Equals(object obj)
+        public bool Equals(PropertyContacts obj)
         {
-            return base.Equals(obj as PropertyContacts);
+            return (Id == obj.Id);
         }
 
-        public bool Equals(PropertyContacts other)
+        public override bool Equals(System.Object obj)
         {
-            return (Id == other.Id);
+            if ((obj == null) ||
+                !(this.GetType().Equals(obj.GetType())))
+                return false;
+
+            return this.Equals(obj as PropertyContacts);
         }
     }
 
@@ -46,9 +50,8 @@ namespace LazyBot.Target.Data
 
             public void Erase(uint searchingAreaId)
             {
-                if (!Targets.ContainsKey(searchingAreaId)) return;
-
-                m_targets.Remove(searchingAreaId);
+                if (Targets.ContainsKey(searchingAreaId))
+                    m_targets.Remove(searchingAreaId);
             }
 
             public void AddArea(uint searchingAreaId)
@@ -59,56 +62,58 @@ namespace LazyBot.Target.Data
 
             public List<Target> Cut(uint searchingAreaId)
             {
-                if (!Targets.ContainsKey(searchingAreaId)) return null;
+                List<Target> targets;
 
-                List<Target> targets = m_targets[searchingAreaId];
+                if (!Targets.TryGetValue(searchingAreaId, out targets)) return null;
+
                 m_targets.Remove(searchingAreaId);
-
                 return targets;
             }
 
             public List<Target> Get(uint searchingAreaId)
             {
-                if (!Targets.ContainsKey(searchingAreaId)) return null;
+                List<Target> targets;
 
-                return m_targets[searchingAreaId];
+                Targets.TryGetValue(searchingAreaId, out targets);
+                return targets;
             }
 
             public List<Target> Remove(uint searchingAreaId)
             {
-                if (!Targets.ContainsKey(searchingAreaId)) return null;
-
-                List<Target> targets = m_targets[searchingAreaId];
-                m_targets.Remove(searchingAreaId);
-
-                return targets;
+                return Cut(searchingAreaId);
             }
 
             public void Erase(uint searchingAreaId, int targetIndex)
             {
-                if (!Targets.ContainsKey(searchingAreaId) ||
-                    targetIndex >= m_targets[searchingAreaId].Count) return;
+                List<Target> targets;
 
-                m_targets[searchingAreaId].RemoveAt(targetIndex);
+                if (!(Targets.TryGetValue(searchingAreaId, out targets)) ||
+                    (targetIndex >= targets.Count)) return;
+
+                targets.RemoveAt(targetIndex);
             }
 
             public Target Cut(uint searchingAreaId, int targetIndex)
             {
-                if (!Targets.ContainsKey(searchingAreaId) ||
-                    targetIndex >= m_targets[searchingAreaId].Count) return null;
+                List<Target> targets;
+                Target target;
 
-                Target target = m_targets[searchingAreaId][targetIndex];
-                m_targets[searchingAreaId].RemoveAt(targetIndex);
+                if (!(Targets.TryGetValue(searchingAreaId, out targets)) ||
+                    (targetIndex >= targets.Count)) return null;
 
+                target = targets[targetIndex];
+                targets.RemoveAt(targetIndex);
                 return target;
             }
 
             public Target Get(uint searchingAreaId, int targetIndex)
             {
-                if (!Targets.ContainsKey(searchingAreaId) ||
-                    targetIndex >= m_targets[searchingAreaId].Count) return null;
+                List<Target> targets;
 
-                return m_targets[searchingAreaId][targetIndex];
+                if (!(Targets.TryGetValue(searchingAreaId, out targets)) ||
+                    (targetIndex >= targets.Count)) return null;
+
+                return targets[targetIndex];
             }
 
             public void AddTarget(uint searchingAreaId, Target target)
@@ -119,15 +124,8 @@ namespace LazyBot.Target.Data
             }
 
             public Target Remove(uint searchingAreaId, int targetIndex)
-            {
-                if (!Targets.ContainsKey(searchingAreaId) ||
-                    targetIndex >= m_targets[searchingAreaId].Count) return null;
-
-
-                Target target = m_targets[searchingAreaId][targetIndex];
-                m_targets[searchingAreaId].RemoveAt(targetIndex);
-
-                return target;
+            {                
+                return Cut(searchingAreaId, targetIndex);
             }
 
             public void AddTarget(uint searchingAreaId, List<(uint, dynamic)> data)
@@ -160,8 +158,10 @@ namespace LazyBot.Target.Data
         {
             get
             {
-                if (!Data.ContainsKey(key)) return null;
-                return Data[key];
+                TargetContainer targetContainer;
+
+                Data.TryGetValue(key, out targetContainer);
+                return targetContainer;
             }            
         }
 
@@ -184,9 +184,9 @@ namespace LazyBot.Target.Data
 
         public void AddType(LazyBot.Target.Property.TargetTypeSO newType)
         {
-            if (Data.ContainsKey(newType)) return;
-
-            _data.Add(newType, new TargetContainer());
+            if (!Data.ContainsKey(newType))
+                _data.Add(newType, new TargetContainer());
         }        
+
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace LazyBot.Audio.Data
 {
+    using AudioSourceEngine = UnityEngine.AudioSource;
     /// <summary>
     /// Keeps audio settings responsible for detection (by enemies) and audibility.
     /// </summary>
@@ -79,18 +80,18 @@ namespace LazyBot.Audio.Data
         /// <summary>
         /// Attached to gameObject audioSource.
         /// </summary>
-        private Dictionary<string, UnityEngine.AudioSource> m_records;
+        private Dictionary<string, AudioSourceEngine> m_records;
 
 
         /// <summary>
         /// Attached to gameObject audioSource.
         /// </summary>
-        public Dictionary<string, UnityEngine.AudioSource> Records
+        public Dictionary<string, AudioSourceEngine> Records
         {
             get
             {
                 return (this.m_records) ??
-                    (this.m_records = new Dictionary<string, UnityEngine.AudioSource>());
+                    (this.m_records = new Dictionary<string, AudioSourceEngine>());
             }
         }
         public float OutherRadiusDetection
@@ -146,13 +147,15 @@ namespace LazyBot.Audio.Data
         /// <returns>Is audio playback has been started.</returns>
         public bool Play(string audioKey)
         {
-            if (!Records.ContainsKey(audioKey))
+            AudioSourceEngine audioSource;
+
+            if (!Records.TryGetValue(audioKey, out audioSource))
                 return false;
 
             if (m_playDelay == 0.0f)
-                Records[audioKey].Play();
+                audioSource.Play();
             else
-                Records[audioKey].PlayDelayed(m_playDelay);
+                audioSource.PlayDelayed(m_playDelay);
 
             return true;
         }
@@ -164,10 +167,12 @@ namespace LazyBot.Audio.Data
         /// <returns>Is audio playback has been started.</returns>
         public bool PlayInstant(string audioKey)
         {
-            if (!Records.ContainsKey(audioKey))
+            AudioSourceEngine audioSource;
+
+            if (!Records.TryGetValue(audioKey, out audioSource))
                 return false;
 
-            Records[audioKey].Play();
+            audioSource.Play();
 
             return true;
         }
@@ -189,11 +194,13 @@ namespace LazyBot.Audio.Data
         /// <returns>Is audio was found and destroyed.</returns>
         public bool DestroyAudioSource(string audioKey)
         {
-            if (!Records.ContainsKey(audioKey))
+            AudioSourceEngine audioSource;
+
+            if (!Records.TryGetValue(audioKey, out audioSource))
                 return false;
 
-            Records[audioKey].Stop();
-            UnityEngine.Object.Destroy(Records[audioKey]);
+            audioSource.Stop();
+            UnityEngine.Object.Destroy(audioSource);
 
             Records.Remove(audioKey);
 
@@ -208,10 +215,12 @@ namespace LazyBot.Audio.Data
         /// <returns>Is audio was found and seted to play after delay.</returns>
         public bool PlayDelayed(string audioKey, float delay)
         {
-            if (!Records.ContainsKey(audioKey))
+            AudioSourceEngine audioSource;
+
+            if (!Records.TryGetValue(audioKey, out audioSource))
                 return false;
 
-            Records[audioKey].PlayDelayed(delay);
+            audioSource.PlayDelayed(delay);
 
             return true;
         }
@@ -227,25 +236,27 @@ namespace LazyBot.Audio.Data
                 (!m_audioClip)) return string.Empty;
 
             string sourceKey = LazyBot.Utility.Data.Hasher.GenerateHash();
-            Records.Add(sourceKey, gameObject.AddComponent<UnityEngine.AudioSource>());
+            AudioSourceEngine audioSource = gameObject.AddComponent<UnityEngine.AudioSource>();
 
-            Records[sourceKey].clip = m_audioClip;
-            Records[sourceKey].outputAudioMixerGroup = m_output;
-            Records[sourceKey].mute = m_mute;
-            Records[sourceKey].playOnAwake = false;
-            Records[sourceKey].loop = m_loop;
-            Records[sourceKey].volume = m_volume;
-            Records[sourceKey].pitch = m_pitch;
-            Records[sourceKey].spatialBlend = m_spatialBlend;
-            Records[sourceKey].reverbZoneMix = m_reverbZoneMix;
+            audioSource.clip = m_audioClip;
+            audioSource.outputAudioMixerGroup = m_output;
+            audioSource.mute = m_mute;
+            audioSource.playOnAwake = false;
+            audioSource.loop = m_loop;
+            audioSource.volume = m_volume;
+            audioSource.pitch = m_pitch;
+            audioSource.spatialBlend = m_spatialBlend;
+            audioSource.reverbZoneMix = m_reverbZoneMix;
 
-            Records[sourceKey].dopplerLevel = m_setting3D.m_dopplerLevel;
-            Records[sourceKey].spread = m_setting3D.m_spread;
-            Records[sourceKey].minDistance = m_setting3D.m_minDistance;
-            Records[sourceKey].maxDistance = m_setting3D.m_maxDistance;
+            audioSource.dopplerLevel = m_setting3D.m_dopplerLevel;
+            audioSource.spread = m_setting3D.m_spread;
+            audioSource.minDistance = m_setting3D.m_minDistance;
+            audioSource.maxDistance = m_setting3D.m_maxDistance;
 
-            Records[sourceKey].SetCustomCurve(AudioSourceCurveType.CustomRolloff, m_setting3D.m_volumeSpread);
-            Records[sourceKey].rolloffMode = AudioRolloffMode.Custom;
+            audioSource.SetCustomCurve(AudioSourceCurveType.CustomRolloff, m_setting3D.m_volumeSpread);
+            audioSource.rolloffMode = AudioRolloffMode.Custom;
+
+            Records.Add(sourceKey, audioSource);
 
             return sourceKey;
         }
@@ -272,5 +283,6 @@ namespace LazyBot.Audio.Data
 
             return m_settingDetection.m_loudness * m_settingDetection.m_loudnessSpread.Evaluate(relativeAudibility);
         }
+
     }
 }

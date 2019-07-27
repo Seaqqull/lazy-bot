@@ -159,6 +159,12 @@ namespace LazyBot.Entity
             m_stateOrder = m_stateOrder.OrderByDescending((state) => state.Y).ToArray();
         }
 
+        protected void AddTargetType(Target.Property.TargetTypeSO newType)
+        {
+            if (!m_targets.Data.ContainsKey(newType))
+                m_targets.AddType(newType);
+        }
+
 
         protected virtual void OnStateChange()
         {
@@ -289,16 +295,17 @@ namespace LazyBot.Entity
         {
             if (area.TargetType == null) return;
 
-            if (m_targets.Data.ContainsKey(area.TargetType))
-                m_targets[area.TargetType].Erase(area.Id);
+            Target.Data.TargetInfo.TargetContainer targetContainer;
+
+            if (m_targets.Data.TryGetValue(area.TargetType, out targetContainer))
+                targetContainer.Erase(area.Id);
         }
 
         public void InitTargetContainer(LazyBot.Area.Searching.SearchingArea area)
         {
             if (area.TargetType == null) return;
 
-            if (!m_targets.Data.ContainsKey(area.TargetType))
-                m_targets.AddType(area.TargetType);
+            AddTargetType(area.TargetType);
 
             m_targets[area.TargetType].AddArea(area.Id);
         }
@@ -307,8 +314,7 @@ namespace LazyBot.Entity
         {
             if (area.TargetType == null) return;
 
-            if (!m_targets.Data.ContainsKey(area.TargetType))
-                m_targets.AddType(area.TargetType);
+            AddTargetType(area.TargetType);
 
             if (area.TargetType.DataOnDetection)// Fill data
                 m_targets[area.TargetType].AddTarget(area.Id, 
@@ -354,5 +360,6 @@ namespace LazyBot.Entity
             yield return new WaitForSeconds(waitSeconds);
             method();
         }
+
     }
 }

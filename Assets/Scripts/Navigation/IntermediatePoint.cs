@@ -1,5 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
+using System;
+
 
 namespace LazyBot.Navigation
 {
@@ -41,14 +42,25 @@ namespace LazyBot.Navigation
             Gizmos.DrawWireSphere(transform.position, m_size);
         }
 
-        /// <summary>
-        /// Compare two points by their ids.
-        /// </summary>
-        /// <param name="other">Other object to compare.</param>
-        /// <returns>Are objects the same.</returns>
-        public bool Equals(IntermediatePoint other)
+
+        public override int GetHashCode()
         {
-            return (this.m_id == other.m_id);
+            return this.m_id.GetHashCode();
         }
+
+        public bool Equals(IntermediatePoint obj)
+        {
+            return (this.m_id == obj.m_id);
+        }
+
+        public override bool Equals(System.Object obj)
+        {
+            if ((obj == null) ||
+                !(this.GetType().Equals(obj.GetType())))
+                return false;
+
+            return this.Equals(obj as IntermediatePoint);
+        }
+
     }
 }

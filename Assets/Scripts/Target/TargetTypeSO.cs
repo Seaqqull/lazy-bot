@@ -33,15 +33,19 @@ namespace LazyBot.Target.Property
             return Name.GetHashCode();
         }
 
-        public override bool Equals(object obj)
+        public bool Equals(TargetTypeSO obj)
         {
-            return base.Equals(obj as TargetTypeSO);
+            return (this.m_name == obj.m_name);
         }
 
-
-        public bool Equals(TargetTypeSO other)
+        public override bool Equals(System.Object obj)
         {
-            return (this.m_name == other.m_name);
+            if ((obj == null) ||
+                !(this.GetType().Equals(obj.GetType())))
+                return false;
+
+            return this.Equals(obj as TargetTypeSO);
         }
+
     }
 }
