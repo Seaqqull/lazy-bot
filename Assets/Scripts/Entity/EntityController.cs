@@ -22,6 +22,7 @@ namespace LazyBot.Entity
         [SerializeField] [Range(0, ushort.MaxValue)] protected float m_pathUpdateDelay;
         [SerializeField] protected LazyBot.Entity.Data.EntityState[] m_states;
 
+        protected LazyBot.Area.Detection.DetectionAreaContainer m_detectionAreas;
         protected LazyBot.Navigation.NavigationContainer m_navigationPath;
         protected LazyBot.Target.Data.TargetInfo m_targets;
 
@@ -36,6 +37,13 @@ namespace LazyBot.Entity
         protected bool m_isSleep;
         protected bool m_isBlock; // Used in two cases: isBlock on sleep \ isBlock on state(sleep deactivated)
 
+        public LazyBot.Area.Detection.DetectionAreaContainer DetectionAreas
+        {
+            get
+            {
+                return m_detectionAreas;
+            }
+        }
         public LazyBot.Navigation.NavigationContainer NavigationPath
         {
             get { return this.m_navigationPath; }
@@ -70,6 +78,7 @@ namespace LazyBot.Entity
 
         protected virtual void Awake()
         {
+            m_detectionAreas = GetComponent<LazyBot.Area.Detection.DetectionAreaContainer>();
             m_navigationPath = GetComponent<LazyBot.Navigation.NavigationContainer>();
             m_targets = new LazyBot.Target.Data.TargetInfo();
 

@@ -136,14 +136,26 @@ namespace LazyBot.Area.Searching
 
                     for (int j = 0; j < targets.Length; j++)
                     {
-                        LazyBot.Area.Detection.DetectionArea detectionArea = targets[j].GetComponent<LazyBot.Area.Detection.DetectionArea>();
-
                         int k;
-                        for (k = 0; k < m_onTargetDetection.Length; k++)
-                            if (!m_onTargetDetection[k].Validate(this, detectionArea)) break;
+                        LazyBot.Area.Detection.DetectionAreaContainer areas = targets[j].
+                            GetComponent<LazyBot.Entity.EntityController>()?.DetectionAreas;
 
-                        if ((k == m_onTargetDetection.Length) && (m_targetType != null))
-                            m_onTargetUpdate.Invoke(this, detectionArea);
+                        foreach (var dArea in areas)
+                        {                            
+                            for (k = 0; k < m_onTargetDetection.Length; k++)
+                                if (!m_onTargetDetection[k].Validate(this, dArea)) break;
+
+                            // If one of the targets areas was detected, then there is no sense 
+                            // to check other because we will grab the same data from them
+                            
+                            // Could be upgraded with detection mask(on each dArea)
+                            // then break will be removed, because we'll get different data from each dArea
+                            if ((k == m_onTargetDetection.Length) && (m_targetType != null))
+                            {
+                                m_onTargetUpdate.Invoke(this, dArea);
+                                break;
+                            }                            
+                        }                        
                     }
                 }
                 

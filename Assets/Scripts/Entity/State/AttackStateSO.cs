@@ -11,12 +11,12 @@ public class AttackStateSO : EntityStateSO
 
     public override void OnStateEnter(EntityController controller)
     {
-        Debug.Log("Saw target");
+        Debug.Log("Saw the target");
     }
 
     public override void OnStateExit(EntityController controller)
     {
-        Debug.Log("Don't see target");
+        Debug.Log("Lost the target");
     }
 
     public override bool Validate(EntityController controller)

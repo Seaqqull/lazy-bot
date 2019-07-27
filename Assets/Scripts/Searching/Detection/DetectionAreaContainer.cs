@@ -1,12 +1,15 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Collections;
+using UnityEngine;
 using System;
+
 
 namespace LazyBot.Area.Detection
 {
     /// <summary>
     /// Used as container for storing/accessing detection areas.
     /// </summary>
-    public class DetectionAreaContainer : MonoBehaviour
+    public class DetectionAreaContainer : MonoBehaviour, IEnumerable<DetectionArea>
     {
         [SerializeField] private DetectionArea[] m_tracingAreas;
 
@@ -117,6 +120,21 @@ namespace LazyBot.Area.Detection
             if ((index >= m_tracingAreas.Length) && (index < 0))
                 return LazyBot.Area.Data.HitAreaState.Unknown;
             return m_tracingAreas[index].State;
-        }        
+        }
+
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public IEnumerator<DetectionArea> GetEnumerator()
+        {
+            foreach (var area in m_tracingAreas)
+            {
+                yield return area;
+            }
+        }
+        
     }
 }
