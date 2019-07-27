@@ -98,7 +98,7 @@ namespace LazyBot.Entity
             for (int i = 0; i < m_stateOrder.Length && !m_isBlock; i++)
             {
                 if ((m_stateOrder[i].X == m_activeState) ||
-                    (!(m_states[m_stateOrder[i].X].CheckOn & m_states[m_stateOrder[i].X].Id)) ||
+                    (!(m_states[m_stateOrder[i].X].CheckOn & m_states[m_activeState].Id)) ||
                     (!(m_states[m_stateOrder[i].X].State.Validate(this)))) continue;
 
                 m_states[m_activeState].State.OnStateExit(this);

@@ -422,7 +422,7 @@ namespace LazyBot.Entity.Data
         {
             if (valueObj.m_mask == 0) return false;
 
-            return ((valueObj.m_mask & (uint)Mathf.Pow(2, value)) == 0);
+            return ((valueObj.m_mask & (uint)Mathf.Pow(2, value)) != 0);
         }
 
         /// <summary>
@@ -435,7 +435,7 @@ namespace LazyBot.Entity.Data
         {
             if (valueObj.m_mask == 0) return false;
 
-            return ((valueObj.m_mask & (uint)Mathf.Pow(2, value)) == 0);
+            return ((valueObj.m_mask & (uint)Mathf.Pow(2, value)) != 0);
         }
     }
 

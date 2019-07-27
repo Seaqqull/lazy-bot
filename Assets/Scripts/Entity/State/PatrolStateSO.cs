@@ -44,7 +44,7 @@ public class PatrolStateSO : EntityStateSO
 
     public override bool Validate(EntityController controller)
     {
-        return controller.NavigationPath.Length == 0; // & target list == empty
+        return ((controller.NavigationPath.Length != 0) && (controller.Targets.Count == 0));
     }
     
     public override void OnStateExit(EntityController controller) // reset navigation path point

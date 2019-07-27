@@ -814,6 +814,12 @@ MonoBehaviour:
     m_checkOnActive:
       m_values: 2/1/0/-1
     m_state: {fileID: 11400000, guid: 855a80e90643d58408b40384d34bf7cf, type: 2}
+  - m_priority: 0
+    m_isBlockingOnSleep: 0
+    m_isBlocking: 0
+    m_checkOnActive:
+      m_values: 2/1/0/-1
+    m_state: {fileID: 11400000, guid: f193a6c82a5411e4996ca73504ab718e, type: 2}
   m_angularSpeed: 90
   m_maxMovementSpeed: 5
 --- !u!114 &1121714429

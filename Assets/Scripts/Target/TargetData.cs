@@ -165,6 +165,22 @@ namespace LazyBot.Target.Data
             }            
         }
 
+        public int Count
+        {
+            get
+            {
+                int count = 0;
+                foreach (var targets in Data.Values)
+                {
+                    foreach (var target in targets.Targets.Values)
+                    {
+                        count += target.Count;
+                    }                    
+                }
+                return count;
+            }
+        }
+
 
         public void AddType(LazyBot.Target.Property.TargetTypeSO newType)
         {
