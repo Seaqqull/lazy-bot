@@ -9,6 +9,11 @@ using System;
 namespace LazyBot.Entity.Data
 {
     /// <summary>
+    /// Used to determine the state action
+    /// </summary>
+    public enum StateAction { unknown, Validate, OnEnter, Execute, OnExit }
+
+    /// <summary>
     /// Float data.
     /// Contains min, max value and regenerate rate.
     /// Also other data, to perform control of float data.

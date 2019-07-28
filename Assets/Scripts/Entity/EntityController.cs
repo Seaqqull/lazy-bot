@@ -20,6 +20,7 @@ namespace LazyBot.Entity
         /// Period of destination path update.
         /// </summary>
         [SerializeField] [Range(0, ushort.MaxValue)] protected float m_pathUpdateDelay;
+        [SerializeField] protected LazyBot.Entity.Data.EntityState[] m_statesSteady;
         [SerializeField] protected LazyBot.Entity.Data.EntityState[] m_states;
 
         protected LazyBot.Area.Detection.DetectionAreaContainer m_detectionAreas;
@@ -33,7 +34,11 @@ namespace LazyBot.Entity
         protected float m_timeSincePathUpdate;
         protected Transform m_transform;
         protected int m_navigationIndex;
+
+        protected BitArray m_steadyActivation;
+        protected Point[] m_stateSteadyOrder; // X - state index, Y - state priority
         protected Point[] m_stateOrder; // X - state index, Y - state priority
+
         protected bool m_isSleep;
         protected bool m_isBlock; // Used in two cases: isBlock on sleep \ isBlock on state(sleep deactivated)
 
@@ -90,38 +95,65 @@ namespace LazyBot.Entity
 
         protected virtual void Start()
         {
-            if (m_states.Length == 0) return;
+            UpdateStates(m_statesSteady, out m_stateSteadyOrder);
+            UpdateStates(m_states, out m_stateOrder);
 
-            UpdateStates();
             OnStateChange();
 
-            m_states[m_activeState].State.OnStateEnter(this);
+            DoStateAction(m_states, m_activeState, Data.StateAction.OnEnter);
+
+            ActivateSteadyState();
         }
 
         protected virtual void Update()
         {
-            if ((m_behaviour.IsDeath) || (m_states.Length == 0)) return;
+            if (m_behaviour.IsDeath) return;
 
             m_timeSincePathUpdate += Time.deltaTime;
 
-            for (int i = 0; i < m_stateOrder.Length && !m_isBlock; i++)
-            {
-                if ((m_stateOrder[i].X == m_activeState) ||
-                    (!(m_states[m_stateOrder[i].X].CheckOn & m_states[m_activeState].Id)) ||
-                    (!(m_states[m_stateOrder[i].X].State.Validate(this)))) continue;
+            int i;
+            Data.EntityState state;
 
-                m_states[m_activeState].State.OnStateExit(this);
+            for (i = 0; i < m_stateSteadyOrder.Length; i++)
+            {
+                state = m_statesSteady[m_stateSteadyOrder[i].X];
+
+                if (state.State.Validate(this))
+                {
+                    if (!m_steadyActivation[m_stateSteadyOrder[i].X])
+                    {
+                        m_steadyActivation[m_stateSteadyOrder[i].X] = true;
+                        state.State.OnStateEnter(this);
+                    }
+                    state.State.Excute(this);
+                }
+                else if (m_steadyActivation[m_stateSteadyOrder[i].X])
+                {                   
+                    m_steadyActivation[m_stateSteadyOrder[i].X] = false;
+                    state.State.OnStateExit(this);                 
+                }
+            }
+
+            for (i = 0; i < m_stateOrder.Length && !m_isBlock; i++)
+            {
+                state = m_states[m_stateOrder[i].X];
+
+                if ((m_stateOrder[i].X == m_activeState) ||
+                    (!(state.CheckOn & m_states[m_activeState].Id)) ||
+                    (!(state.State.Validate(this)))) continue;
+
+                state.State.OnStateExit(this);
 
                 m_activeState = m_stateOrder[i].X;
                 OnStateChange();
 
-                m_states[m_activeState].State.OnStateEnter(this);                
+                state.State.OnStateEnter(this);                
                 break;
             }
 
-            m_states[m_activeState].State.Excute(this);
+            DoStateAction(m_states, m_activeState, Data.StateAction.Execute);
         }
-
+        
 
         /// <summary>
         /// Cancels delayed execute of exiting from sleep.
@@ -136,27 +168,23 @@ namespace LazyBot.Entity
             }
         }
 
-        /// <summary>
-        /// Updates ordered que of states based on its priority.
-        /// </summary>
-        protected void UpdateStates()
+        protected void ActivateSteadyState()
         {
-            m_stateOrder = new Point[m_states.Length];
+            Data.EntityState state;
+            m_steadyActivation = new BitArray(m_stateSteadyOrder.Length);            
 
-            for (int i = 0; i < m_states.Length; i++)
+            for (int i = 0; i < m_stateSteadyOrder.Length; i++)
             {
-                m_stateOrder[i].X = i;
-                m_stateOrder[i].Y = m_states[i].Priority;
+                state = m_statesSteady[m_stateSteadyOrder[i].X];
 
-                m_states[i].Id = (uint)i;
+                if (!state.State.Validate(this))
+                    continue;
 
-                m_states[i].CheckOn.Remove((uint)i);
-                m_states[i].CheckOn.ValidatesValues(0, (uint)(m_states.Length - 1));
+                m_steadyActivation[i] = true;
 
-                m_states[i].CheckOn.Bake();
+                state.State.OnStateEnter(this);
+                state.State.Excute(this);
             }
-
-            m_stateOrder = m_stateOrder.OrderByDescending((state) => state.Y).ToArray();
         }
 
         protected void AddTargetType(Target.Property.TargetTypeSO newType)
@@ -165,9 +193,65 @@ namespace LazyBot.Entity
                 m_targets.AddType(newType);
         }
 
+        /// <summary>
+        /// Updates ordered que of states based on its priority.
+        /// </summary>
+        protected void UpdateStates(LazyBot.Entity.Data.EntityState[] states, out Point[] order)
+        {
+            order = new Point[states.Length];
+
+            for (int i = 0; i < states.Length; i++)
+            {
+                order[i].X = i;
+                order[i].Y = states[i].Priority;
+
+                states[i].Id = (uint)i;
+
+                states[i].CheckOn.Remove((uint)i);
+                states[i].CheckOn.ValidatesValues(0, (uint)(states.Length - 1));
+
+                states[i].CheckOn.Bake();
+            }
+
+            order = order.OrderByDescending((state) => state.Y).ToArray();
+        }
+
+        protected void DoStateAction(LazyBot.Entity.Data.EntityState state, LazyBot.Entity.Data.StateAction action)
+        {            
+            switch (action)
+            {
+                case Data.StateAction.Validate:
+                    state.State.Validate(this);
+                    break;
+                case Data.StateAction.OnEnter:
+                    state.State.OnStateEnter(this);
+                    break;
+                case Data.StateAction.Execute:
+                    state.State.Excute(this);
+                    break;
+                case Data.StateAction.OnExit:
+                    state.State.OnStateExit(this);
+                    break;
+                default:
+#if UNITY_EDITOR
+                    Debug.LogError("Unknown state action", this);
+#endif
+                    break;
+            }
+        }
+
+        protected void DoStateAction(LazyBot.Entity.Data.EntityState[] states, int actionPosition, LazyBot.Entity.Data.StateAction action)
+        {
+            if (actionPosition >= states.Length) return;
+
+            DoStateAction(states[actionPosition], action);
+        }
+
 
         protected virtual void OnStateChange()
         {
+            if (m_states.Length == 0) return;
+
             ResetSleep();
             m_isBlock = m_states[m_activeState].IsBlocking;
         }
