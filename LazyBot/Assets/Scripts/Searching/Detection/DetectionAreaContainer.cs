@@ -11,30 +11,30 @@ namespace LazyBot.Area.Detection
     /// </summary>
     public class DetectionAreaContainer : MonoBehaviour, IEnumerable<DetectionArea>
     {
-        [SerializeField] private DetectionArea[] m_tracingAreas;
+        [SerializeField] private DetectionArea[] _tracingAreas;
 
         /// <summary>
         /// Wether to load detection areas at startup.
         /// </summary>
-        private bool m_isAutoLoad;
+        private bool _isAutoLoad;
 
         public DetectionArea[] TracingAreas
         {
             get
             {
-                return this.m_tracingAreas;
+                return this._tracingAreas;
             }
         }
         public int Length
         {
-            get { return m_tracingAreas.Length; }
+            get { return _tracingAreas.Length; }
         }
 
 
         private void Awake()
         {
-            if (m_isAutoLoad)
-                m_tracingAreas = GetComponentsInChildren<DetectionArea>();
+            if (_isAutoLoad)
+                _tracingAreas = GetComponentsInChildren<DetectionArea>();
         }
 
         private void OnEnable()
@@ -56,8 +56,8 @@ namespace LazyBot.Area.Detection
         {
             if (!enabled) return;
 
-            for (int i = 0; i < m_tracingAreas.Length; i++)
-                m_tracingAreas[i].enabled = isActive;
+            for (int i = 0; i < _tracingAreas.Length; i++)
+                _tracingAreas[i].enabled = isActive;
         }        
 
 
@@ -70,7 +70,7 @@ namespace LazyBot.Area.Detection
         {
             if (!enabled) return;
 
-            m_tracingAreas[index].enabled = isActive;
+            _tracingAreas[index].enabled = isActive;
         }
 
         /// <summary>
@@ -82,10 +82,10 @@ namespace LazyBot.Area.Detection
         {
             if (!enabled) return;
 
-            for (int i = 0; i < m_tracingAreas.Length; i++)
-                if (m_tracingAreas[i].Name == name)
+            for (int i = 0; i < _tracingAreas.Length; i++)
+                if (_tracingAreas[i].Name == name)
                 {
-                    m_tracingAreas[i].enabled = isActive;
+                    _tracingAreas[i].enabled = isActive;
                     break;
                 }
         }
@@ -98,28 +98,28 @@ namespace LazyBot.Area.Detection
         /// <returns>Position in scene</returns>
         public Transform GetPointTransform(int index)
         {
-            if (index >= m_tracingAreas.Length && index < 0)
+            if (index >= _tracingAreas.Length && index < 0)
                 return null;
-            return m_tracingAreas[index].transform;
+            return _tracingAreas[index].transform;
         }
 
         public void SetHealthLink(Action<float> onDamage)
         {
-            for (int i = 0; i < m_tracingAreas.Length; i++)
-                m_tracingAreas[i].OnDamage = onDamage;
+            for (int i = 0; i < _tracingAreas.Length; i++)
+                _tracingAreas[i].OnDamage = onDamage;
         }
 
         public void SetSoundLink(Func<Vector3, float> onSound)
         {
-            for (int i = 0; i < m_tracingAreas.Length; i++)
-                m_tracingAreas[i].OnSound = onSound;
+            for (int i = 0; i < _tracingAreas.Length; i++)
+                _tracingAreas[i].OnSound = onSound;
         }
 
         public LazyBot.Area.Data.HitAreaState GetPointState(int index)
         {
-            if ((index >= m_tracingAreas.Length) && (index < 0))
+            if ((index >= _tracingAreas.Length) && (index < 0))
                 return LazyBot.Area.Data.HitAreaState.Unknown;
-            return m_tracingAreas[index].State;
+            return _tracingAreas[index].State;
         }
 
 
@@ -130,7 +130,7 @@ namespace LazyBot.Area.Detection
 
         public IEnumerator<DetectionArea> GetEnumerator()
         {
-            foreach (var area in m_tracingAreas)
+            foreach (var area in _tracingAreas)
             {
                 yield return area;
             }

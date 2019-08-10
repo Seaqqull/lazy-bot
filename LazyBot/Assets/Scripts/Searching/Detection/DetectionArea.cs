@@ -10,38 +10,38 @@ namespace LazyBot.Area.Detection
     {
         protected static Color editor_gizmo_color = Color.blue;
 
-        [SerializeField] protected string m_name;
+        [SerializeField] protected string _name;
 
-        [SerializeField] protected Data.HitAreaState m_state = Data.HitAreaState.Enabled;
+        [SerializeField] protected Data.HitAreaState _state = Data.HitAreaState.Enabled;
 
-        [SerializeField] protected LazyBot.Entity.EntityController m_owner;
+        [SerializeField] protected LazyBot.Entity.EntityController _owner;
 
-        [SerializeField] [Range(0, ushort.MaxValue)] protected float m_damageMultiplier = 1.0f;
+        [SerializeField] [Range(0, ushort.MaxValue)] protected float _damageMultiplier = 1.0f;
 
-        protected Func<Vector3, float> m_onSound = delegate { return 0; };
-        protected Action<float> m_onDamage = delegate { };
+        protected Func<Vector3, float> _onSound = delegate { return 0; };
+        protected Action<float> _onDamage = delegate { };
 
-        protected Color m_gizmoColor = editor_gizmo_color;
+        protected Color _gizmoColor = editor_gizmo_color;
 
-        protected static uint m_idCounter = 0;
-        protected bool m_wasFound = false;
-        protected Collider m_colider;
-        protected uint m_id;
+        protected static uint _idCounter = 0;
+        protected bool _wasFound = false;
+        protected Collider _colider;
+        protected uint _id;
 
         public Func<Vector3, float> OnSound
         {
-            get { return this.m_onSound; }
-            set { this.m_onSound = value; }
+            get { return this._onSound; }
+            set { this._onSound = value; }
         }
         public Data.HitAreaState State
         {
             get
             {
-                return this.m_state;
+                return this._state;
             }
             set
             {
-                if (((m_state == Data.HitAreaState.Unknown) || (m_state == Data.HitAreaState.Disabled)) &&
+                if (((_state == Data.HitAreaState.Unknown) || (_state == Data.HitAreaState.Disabled)) &&
                     (value != Data.HitAreaState.Enabled))
                     return;
 
@@ -50,26 +50,26 @@ namespace LazyBot.Area.Detection
         }
         public Action<float> OnDamage
         {
-            get { return this.m_onDamage; }
-            set { this.m_onDamage = value; }
+            get { return this._onDamage; }
+            set { this._onDamage = value; }
         }
         public float DamageMultiplier
         {
-            get { return this.m_damageMultiplier; }
-            set { this.m_damageMultiplier = value; }
+            get { return this._damageMultiplier; }
+            set { this._damageMultiplier = value; }
         }        
         public Collider Collider
         {
             get
             {
-                return this.m_colider;
+                return this._colider;
             }
         }
         public uint OwnerId
         {
             get
             {
-                if (m_owner) return m_owner.Behaviour.Id;
+                if (_owner) return _owner.Behaviour.Id;
 
 #if UNITY_EDITOR
                 Debug.LogError("Owner not defined");
@@ -81,25 +81,25 @@ namespace LazyBot.Area.Detection
         {
             get
             {
-                return this.m_name;
+                return this._name;
             }
         }
         public uint Id
         {
-            get { return this.m_id; }
+            get { return this._id; }
         }
         
-        public Color m_gizmoColorInactive = Color.grey;
-        public Color m_gizmoColorActive = Color.blue;
-        public Color m_gizmoColorFound = Color.red;
-        public float m_gizmoSize = 0.1f;
+        public Color _gizmoColorInactive = Color.grey;
+        public Color _gizmoColorActive = Color.blue;
+        public Color _gizmoColorFound = Color.red;
+        public float _gizmoSize = 0.1f;
 
 
         protected virtual void Awake()
         {
-            m_id = m_idCounter++;
+            _id = _idCounter++;
 
-            m_colider = GetCollider();
+            _colider = GetCollider();
         }
 
         protected virtual void OnEnable()
@@ -114,19 +114,19 @@ namespace LazyBot.Area.Detection
 
         protected virtual void OnDestroy()
         {
-            m_state = Data.HitAreaState.Enabled;
+            _state = Data.HitAreaState.Enabled;
         }
 
         protected virtual void LateUpdate()
         {
-            if (m_state == Data.HitAreaState.Unknown) return;
+            if (_state == Data.HitAreaState.Unknown) return;
 
-            if ((!m_wasFound) &&
-                (m_state != Data.HitAreaState.Disabled))
+            if ((!_wasFound) &&
+                (_state != Data.HitAreaState.Disabled))
                 State = Data.HitAreaState.Enabled;
 
             SetAreaColor();
-            m_wasFound = false;
+            _wasFound = false;
         }
 
 
@@ -135,16 +135,16 @@ namespace LazyBot.Area.Detection
         /// </summary>
         protected virtual void SetAreaColor()
         {
-            switch (m_state)
+            switch (_state)
             {                
                 case Data.HitAreaState.Disabled:
-                    this.m_gizmoColor = this.m_gizmoColorInactive;
+                    this._gizmoColor = this._gizmoColorInactive;
                     break;
                 case Data.HitAreaState.Enabled:
-                    this.m_gizmoColor = this.m_gizmoColorActive;
+                    this._gizmoColor = this._gizmoColorActive;
                     break;
                 case Data.HitAreaState.Found:
-                    this.m_gizmoColor = this.m_gizmoColorFound;
+                    this._gizmoColor = this._gizmoColorFound;
                     break;
                 default:
                     break;
@@ -159,11 +159,11 @@ namespace LazyBot.Area.Detection
         protected virtual void SetState(Data.HitAreaState incomeState)
         {
             if (incomeState == Data.HitAreaState.Found)
-                m_wasFound = true;
+                _wasFound = true;
             if (incomeState == Data.HitAreaState.Disabled)
-                m_wasFound = false;
+                _wasFound = false;
 
-            m_state = incomeState;            
+            _state = incomeState;            
         }
 
 
@@ -172,12 +172,12 @@ namespace LazyBot.Area.Detection
 
         public void PerformDamage(float damage)
         {
-            m_onDamage(damage * m_damageMultiplier);
+            _onDamage(damage * _damageMultiplier);
         }
 
         public float EmitSound(Vector3 listener)
         {            
-            return m_onSound(listener);
+            return _onSound(listener);
         }
     }
 }

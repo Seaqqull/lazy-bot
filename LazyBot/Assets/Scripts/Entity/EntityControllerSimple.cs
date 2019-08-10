@@ -4,12 +4,12 @@ namespace LazyBot.Entity
 {
     public class EntityControllerSimple : EntityController
     {
-        [SerializeField] [Range(0.0f, ushort.MaxValue)] private float m_angularSpeed;
-        [SerializeField] [Range(0.0f, ushort.MaxValue)] private float m_maxMovementSpeed;
+        [SerializeField] [Range(0.0f, ushort.MaxValue)] private float _angularSpeed;
+        [SerializeField] [Range(0.0f, ushort.MaxValue)] private float _maxMovementSpeed;
 
-        private float m_speed;        
-        private Vector3 m_destination;
-        private Vector3 m_direction;
+        private float _speed;        
+        private Vector3 _destination;
+        private Vector3 _direction;
 
         /// <summary>
         /// Returns distance to target.
@@ -17,7 +17,7 @@ namespace LazyBot.Entity
         /// <returns>Distance to target.</returns>
         public override float Distance()
         {
-            return Vector3.Distance(m_transform.position, m_destination);
+            return Vector3.Distance(_transform.position, _destination);
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace LazyBot.Entity
         /// <param name="speed">Speed.</param>
         public override void UpdateSpeed(float speed)
         {
-            m_speed = (speed > m_maxMovementSpeed) ? m_maxMovementSpeed : speed;
+            _speed = (speed > _maxMovementSpeed) ? _maxMovementSpeed : speed;
         }
 
         /// <summary>
@@ -34,14 +34,14 @@ namespace LazyBot.Entity
         /// </summary>
         public override void Move()
         {
-            m_direction = m_destination - m_transform.position;
+            _direction = _destination - _transform.position;
 
-            float step = m_angularSpeed * Mathf.Deg2Rad * Time.deltaTime;
-            Vector3 newDir = Vector3.RotateTowards(m_transform.forward, m_direction, step, 0.0f);
-            //Debug.DrawRay(m_transform.position, newDir, Color.red);
+            float step = _angularSpeed * Mathf.Deg2Rad * Time.deltaTime;
+            Vector3 newDir = Vector3.RotateTowards(_transform.forward, _direction, step, 0.0f);
+            //Debug.DrawRay(_transform.position, newDir, Color.red);
             
-            m_transform.rotation = Quaternion.LookRotation(newDir);
-            m_transform.Translate(Vector3.forward * m_speed * Time.deltaTime);
+            _transform.rotation = Quaternion.LookRotation(newDir);
+            _transform.Translate(Vector3.forward * _speed * Time.deltaTime);
         }
 
         /// <summary>
@@ -52,13 +52,13 @@ namespace LazyBot.Entity
         public override void UpdatePath(Vector3 destination = new Vector3(), bool isImmediate = false)
         {
             if ((!isImmediate) &&
-                (m_timeSincePathUpdate < m_pathUpdateDelay))
+                (_timeSincePathUpdate < _pathUpdateDelay))
                 return;
 
-            m_destination = (destination == Vector3.zero) ?
-                m_destination : destination;            
+            _destination = (destination == Vector3.zero) ?
+                _destination : destination;            
 
-            m_timeSincePathUpdate = 0.0f;
+            _timeSincePathUpdate = 0.0f;
         }
     }
 }

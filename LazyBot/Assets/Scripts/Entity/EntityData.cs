@@ -24,114 +24,114 @@ namespace LazyBot.Entity.Data
         /// <summary>
         /// Is value unchangeable.
         /// </summary>
-        [SerializeField] protected bool m_isLock = false;
+        [SerializeField] protected bool _isLock = false;
         /// <summary>
         /// Is value unlimited.
         /// </summary>
-        [SerializeField] protected bool m_isUnlimited = false;
+        [SerializeField] protected bool _isUnlimited = false;
         /// <summary>
         /// Is value can be regenerated.
         /// </summary>
-        [SerializeField] protected bool m_isRegenerate = true;
+        [SerializeField] protected bool _isRegenerate = true;
 
-        [SerializeField] protected float m_value;
+        [SerializeField] protected float _value;
 
         /// <summary>
         /// Startup value.
         /// </summary>
-        [SerializeField] protected float m_valueStart;
+        [SerializeField] protected float _valueStart;
         /// <summary>
         /// Regenerate rate.
         /// </summary>
-        [SerializeField] protected float m_valueRegenerateRate;
+        [SerializeField] protected float _valueRegenerateRate;
         /// <summary>
         /// Low acceptable value.
         /// </summary>
-        [SerializeField] protected float m_valueLow;
+        [SerializeField] protected float _valueLow;
 
         /// <summary>
         /// Maximum acceptable value.
         /// </summary>
-        [SerializeField] protected float m_valueMax;
+        [SerializeField] protected float _valueMax;
         /// <summary>
         /// Minimum acceptable value.
         /// </summary>
-        [SerializeField] protected float m_valueMin;
+        [SerializeField] protected float _valueMin;
         
         public float RegenerateRate
         {
-            get { return this.m_valueRegenerateRate; }
+            get { return this._valueRegenerateRate; }
         }
         public bool IsRegenerate
         {
-            get { return this.m_isRegenerate; }
-            set { this.m_isRegenerate = value; }
+            get { return this._isRegenerate; }
+            set { this._isRegenerate = value; }
         }
         public bool IsUnlimited
         {
-            get { return this.m_isUnlimited; }
-            set { this.m_isUnlimited = value; }
+            get { return this._isUnlimited; }
+            set { this._isUnlimited = value; }
         }
         public bool IsValueLow
         {
-            get { return (m_value <= m_valueLow); }
+            get { return (_value <= _valueLow); }
         }
         public bool IsLock
         {
-            get { return this.m_isLock; }
-            set { this.m_isLock = value; }
+            get { return this._isLock; }
+            set { this._isLock = value; }
         }
         public bool IsLow
         {
-            get { return (this.m_value <= this.m_valueMin); }
+            get { return (this._value <= this._valueMin); }
         }
         public bool IsMax
         {
-            get { return (this.m_value >= this.m_valueMax); }
+            get { return (this._value >= this._valueMax); }
         }
         /// <summary>
         /// Startup value.
         /// </summary>
         public float Start
         {
-            get { return this.m_valueStart; }
+            get { return this._valueStart; }
         }
         public float Value
         {
-            get { return this.m_value; }
+            get { return this._value; }
         }
         /// <summary>
         /// Maximum acceptable value.
         /// </summary>
         public float Max
         {
-            get { return this.m_valueMax; }
+            get { return this._valueMax; }
         }
         /// <summary>
         /// Minimum acceptable value.
         /// </summary>
         public float Min
         {
-            get { return this.m_valueMin; }
+            get { return this._valueMin; }
         }
         /// <summary>
         /// Low acceptable value.
         /// </summary>
         public float Low
         {
-            get { return this.m_valueLow; }
+            get { return this._valueLow; }
         }
 
 
         public FloatEntityData()
         {
-            m_value = m_valueStart;
+            _value = _valueStart;
         }
 
 
         protected bool IsOnLimit()
         {
-            return ((m_value <= m_valueMin) || (m_value >= m_valueMax));
+            return ((_value <= _valueMin) || (_value >= _valueMax));
         }
 
         /// <summary>
@@ -140,11 +140,11 @@ namespace LazyBot.Entity.Data
         /// <param name="value">Change value.</param>
         public bool IsChangable(float value)
         {
-            if (m_isUnlimited) return true;
+            if (_isUnlimited) return true;
             else if (IsOnLimit()) return false;
 
-            float newValue = m_value + value;
-            return (newValue <= m_valueMax) && (newValue >= m_valueMin);
+            float newValue = _value + value;
+            return (newValue <= _valueMax) && (newValue >= _valueMin);
         }
 
         /// <summary>
@@ -154,9 +154,9 @@ namespace LazyBot.Entity.Data
         /// <returns>Is regenerate was successful.</returns>
         public virtual bool Regenerate(float deltaTime = 1.0f)
         {
-            if (!m_isRegenerate) return false;
+            if (!_isRegenerate) return false;
 
-            Change(m_valueRegenerateRate * deltaTime);
+            Change(_valueRegenerateRate * deltaTime);
 
             return true;
         }        
@@ -169,13 +169,13 @@ namespace LazyBot.Entity.Data
         /// <returns>Is value was successful changed.</returns>
         public virtual bool Change(float value, bool asPossible = false)
         {
-            if (m_isUnlimited) return true;
-            else if ((m_isLock) ||
+            if (_isUnlimited) return true;
+            else if ((_isLock) ||
                 ((!asPossible) && (!IsChangable(value)))) return false;
 
-            m_value += value;
-            if (m_value > m_valueMax) m_value = m_valueMax;
-            else if (m_value < m_valueMin) m_value = m_valueMin;
+            _value += value;
+            if (_value > _valueMax) _value = _valueMax;
+            else if (_value < _valueMin) _value = _valueMin;
 
             return true;
         }
@@ -201,7 +201,7 @@ namespace LazyBot.Entity.Data
     [System.Serializable]    
     public class SliderFloatEntityData : FloatEntityData
     {
-        [SerializeField] protected Slider m_slider;
+        [SerializeField] protected Slider _slider;
 
 
         /// <summary>
@@ -209,10 +209,10 @@ namespace LazyBot.Entity.Data
         /// </summary>
         private void UpdateSlider()
         {
-            if (!m_slider) return;
+            if (!_slider) return;
 
-            m_slider.value = 
-                LazyBot.Utility.Data.FloatHelper.Map(m_value, m_valueMin, m_valueMax, m_slider.minValue, m_slider.maxValue);
+            _slider.value = 
+                LazyBot.Utility.Data.FloatHelper.Map(_value, _valueMin, _valueMax, _slider.minValue, _slider.maxValue);
         }
 
 
@@ -253,30 +253,30 @@ namespace LazyBot.Entity.Data
         /// <summary>
         /// Represents all possible values.
         /// </summary>
-        [SerializeField] private string m_values;
+        [SerializeField] private string _values;
 
         /// <summary>
         /// Separates possible value.
         /// </summary>
-        private char m_separator = '/';
+        private char _separator = '/';
         /// <summary>
         /// Values as mask of bit set.
         /// </summary>
-        private ulong m_mask;
+        private ulong _mask;
 
         /// <summary>
         /// All possible values.
         /// </summary>
         public string Values
         {
-            get { return this.m_values; }
+            get { return this._values; }
         }
         /// <summary>
         /// Values as mask of bit set.
         /// </summary>
         public ulong Mask
         {
-            get { return this.m_mask; }
+            get { return this._mask; }
         }
 
 
@@ -286,8 +286,8 @@ namespace LazyBot.Entity.Data
         /// <returns>Validated values.</returns>
         private string[] Validate()
         {
-            string[] values = m_values.Trim(new char[] { ' ', m_separator }).
-                Split(m_separator).Distinct().ToArray();
+            string[] values = _values.Trim(new char[] { ' ', _separator }).
+                Split(_separator).Distinct().ToArray();
 
             values = values.Where((item) => int.TryParse(item, out int result)).ToArray();
             return values;
@@ -300,8 +300,8 @@ namespace LazyBot.Entity.Data
         /// <returns>Validated values.</returns>
         private string[] Validate(uint number)
         {
-            string[] values = (m_values.Trim(new char[] { ' ', m_separator }) + m_separator + number.ToString()).
-                Trim(new char[] { ' ', m_separator }).Split(m_separator).Distinct().ToArray();
+            string[] values = (_values.Trim(new char[] { ' ', _separator }) + _separator + number.ToString()).
+                Trim(new char[] { ' ', _separator }).Split(_separator).Distinct().ToArray();
 
             values = values.Where((item) => int.TryParse(item, out int result)).ToArray();
             return values;
@@ -315,18 +315,18 @@ namespace LazyBot.Entity.Data
         public ulong Bake()
         {
             string[] valuesS = Validate();
-            m_values = string.Join(m_separator.ToString(), valuesS);
+            _values = string.Join(_separator.ToString(), valuesS);
 
-            m_mask = 0;
+            _mask = 0;
 
             int[] valuesI = Array.ConvertAll<string, int>(valuesS, int.Parse);
 
             for (int i = 0; i < valuesI.Length; i++)
             {
-                m_mask |= (uint)Mathf.Pow(2, valuesI[i]);
+                _mask |= (uint)Mathf.Pow(2, valuesI[i]);
             }
 
-            return m_mask;
+            return _mask;
         }
 
         /// <summary>
@@ -336,7 +336,7 @@ namespace LazyBot.Entity.Data
         public void Add(uint number)
         {
             string[] values = Validate(number);
-            m_values = string.Join(m_separator.ToString(), values);
+            _values = string.Join(_separator.ToString(), values);
         }
 
         /// <summary>
@@ -345,7 +345,7 @@ namespace LazyBot.Entity.Data
         public void ValidatesValues()
         {
             string[] values = Validate();
-            m_values = string.Join(m_separator.ToString(), values);
+            _values = string.Join(_separator.ToString(), values);
         }
 
         /// <summary>
@@ -358,7 +358,7 @@ namespace LazyBot.Entity.Data
             int[] valuesI = Array.ConvertAll<string, int>(valuesS, int.Parse);
 
             valuesI = valuesI.Where((el) => el != number).ToArray();
-            m_values = string.Join(m_separator.ToString(), valuesI);
+            _values = string.Join(_separator.ToString(), valuesI);
         }
 
         /// <summary>
@@ -370,7 +370,7 @@ namespace LazyBot.Entity.Data
             string[] values = Validate();
             values = values.Where((item) => int.Parse(item) >= min).ToArray();
 
-            m_values = string.Join(m_separator.ToString(), values);
+            _values = string.Join(_separator.ToString(), values);
         }
 
         /// <summary>
@@ -382,7 +382,7 @@ namespace LazyBot.Entity.Data
             string[] values = Validate();
             values = values.Where((item) => int.Parse(item) <= max).ToArray();
 
-            m_values = string.Join(m_separator.ToString(), values);
+            _values = string.Join(_separator.ToString(), values);
         }
 
         /// <summary>
@@ -396,7 +396,7 @@ namespace LazyBot.Entity.Data
             values = values.Where((item) => int.Parse(item) >= min).ToArray();
             values = values.Where((item) => int.Parse(item) <= max).ToArray();
 
-            m_values = string.Join(m_separator.ToString(), values);
+            _values = string.Join(_separator.ToString(), values);
         }
 
 
@@ -408,7 +408,7 @@ namespace LazyBot.Entity.Data
         public IEnumerator<uint> GetEnumerator()
         {
             string[] valuesS = Validate();
-            m_values = string.Join(m_separator.ToString(), valuesS);
+            _values = string.Join(_separator.ToString(), valuesS);
 
             uint[] valuesI = Array.ConvertAll<string, uint>(valuesS, uint.Parse);
 
@@ -425,9 +425,9 @@ namespace LazyBot.Entity.Data
         /// <returns></returns>
         public static bool operator &(IntMask valueObj, int value)
         {
-            if (valueObj.m_mask == 0) return false;
+            if (valueObj._mask == 0) return false;
 
-            return ((valueObj.m_mask & (uint)Mathf.Pow(2, value)) != 0);
+            return ((valueObj._mask & (uint)Mathf.Pow(2, value)) != 0);
         }
 
         /// <summary>
@@ -438,9 +438,9 @@ namespace LazyBot.Entity.Data
         /// <returns></returns>
         public static bool operator &(IntMask valueObj, uint value)
         {
-            if (valueObj.m_mask == 0) return false;
+            if (valueObj._mask == 0) return false;
 
-            return ((valueObj.m_mask & (uint)Mathf.Pow(2, value)) != 0);
+            return ((valueObj._mask & (uint)Mathf.Pow(2, value)) != 0);
         }
     }
 
@@ -450,27 +450,27 @@ namespace LazyBot.Entity.Data
     [System.Serializable]
     public class EntityState
     {
-        /*[SerializeField]*/ private uint m_id;
-        [SerializeField] [Range(0, ushort.MaxValue)] private int m_priority;
+        /*[SerializeField]*/ private uint _id;
+        [SerializeField] [Range(0, ushort.MaxValue)] private int _priority;
         /// <summary>
         /// Is state can be ended, when state in sleep mode.
         /// </summary>
-        [SerializeField] private bool m_isBlockingOnSleep;
+        [SerializeField] private bool _isBlockingOnSleep;
         /// <summary>
         /// Is state can be ended, when state in active mode.
         /// </summary>
-        [SerializeField] private bool m_isBlocking;
+        [SerializeField] private bool _isBlocking;
 
         /// <summary>
         /// Mask of states, on which this state can be activated.
         /// </summary>
-        [SerializeField] private IntMask m_checkOnActive;
+        [SerializeField] private IntMask _checkOnActive;
         /// <summary>
         /// State methods.
         /// </summary>
-        [SerializeField] private EntityStateSO m_state;
+        [SerializeField] private EntityStateSO _state;
 
-        private bool m_isActive;
+        private bool _isActive;
 
 
         /// <summary>
@@ -478,42 +478,42 @@ namespace LazyBot.Entity.Data
         /// </summary>
         public bool IsBlockingOnSleep
         {
-            get { return this.m_isBlockingOnSleep; }
+            get { return this._isBlockingOnSleep; }
         }
         /// <summary>
         /// State methods.
         /// </summary>
         public EntityStateSO State
         {
-            get { return this.m_state; }
+            get { return this._state; }
         }
         /// <summary>
         /// Mask of states, on which this state can be activated.
         /// </summary>
         public IntMask CheckOn
         {
-            get { return this.m_checkOnActive; }
+            get { return this._checkOnActive; }
         }
         /// <summary>
         /// Is state can be ended, when state in active mode.
         /// </summary>
         public bool IsBlocking
         {
-            get { return this.m_isBlocking; }
+            get { return this._isBlocking; }
         }
         public bool IsActive
         {
-            get { return this.m_isActive; }
-            set { this.m_isActive = value; }
+            get { return this._isActive; }
+            set { this._isActive = value; }
         }
         public int Priority
         {
-            get { return this.m_priority; }
+            get { return this._priority; }
         }
         public uint Id
         {
-            get { return this.m_id; }
-            set { this.m_id = value; }
+            get { return this._id; }
+            set { this._id = value; }
         }
     }
 }

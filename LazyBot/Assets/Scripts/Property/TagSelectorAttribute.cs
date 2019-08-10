@@ -2,5 +2,5 @@
 
 public class TagSelectorAttribute : PropertyAttribute
 {
-    public bool m_useDefaultTagDrawer = false;
+    public bool _useDefaultTagDrawer = false;
 }

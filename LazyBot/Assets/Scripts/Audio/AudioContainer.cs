@@ -10,42 +10,42 @@ namespace LazyBot.Audio
     /// </summary>
     public class AudioContainer : MonoBehaviour
     {
-        [SerializeField] private string m_name;
+        [SerializeField] private string _name;
 
         /// <summary>
         /// Is container can contain other containers.
         /// </summary>
-        [SerializeField] private bool m_isAccommodate = true;
-        [SerializeField] private bool m_isActive = true;
+        [SerializeField] private bool _isAccommodate = true;
+        [SerializeField] private bool _isActive = true;
         /// <summary>
         /// Is container can be child in other container.
         /// </summary>
-        [SerializeField] private bool m_isNested = true;
+        [SerializeField] private bool _isNested = true;
 
-        [SerializeField] private List<LazyBot.Audio.Data.AudioSource> m_audios;
+        [SerializeField] private List<LazyBot.Audio.Data.AudioSource> _audios;
 
 
-        private List<LazyBot.Audio.AudioContainer> m_containers;
+        private List<LazyBot.Audio.AudioContainer> _containers;
 
 
         public List<LazyBot.Audio.AudioContainer> Containers
         {
             get
             {
-                return (this.m_containers) ??
-                    (this.m_containers = new List<LazyBot.Audio.AudioContainer>());
+                return (this._containers) ??
+                    (this._containers = new List<LazyBot.Audio.AudioContainer>());
             }
             set
             {
-                this.m_containers = value;
+                this._containers = value;
             }
         }
         public List<LazyBot.Audio.Data.AudioSource> Audios
         {
             get
             {
-                return (this.m_audios) ??
-                    (this.m_audios = new List<LazyBot.Audio.Data.AudioSource>());
+                return (this._audios) ??
+                    (this._audios = new List<LazyBot.Audio.Data.AudioSource>());
             }
         }
         /// <summary>
@@ -53,19 +53,19 @@ namespace LazyBot.Audio
         /// </summary>
         public bool IsAccommodate
         {
-            get { return this.m_isAccommodate; }
+            get { return this._isAccommodate; }
         }
         public bool IsActive
         {
-            get { return this.m_isActive; }
-            set { this.m_isActive = value; }
+            get { return this._isActive; }
+            set { this._isActive = value; }
         }
         /// <summary>
         /// Is container can be child in other container.
         /// </summary>
         public bool IsNested
         {
-            get { return this.m_isNested; }
+            get { return this._isNested; }
         }
 
 
@@ -76,12 +76,12 @@ namespace LazyBot.Audio
             Containers = GetComponentsInChildren<LazyBot.Audio.AudioContainer>().
                 OfType<LazyBot.Audio.AudioContainer>().ToList();
 
-            for (int i = 0; i < m_containers.Count; i++)
+            for (int i = 0; i < _containers.Count; i++)
             {
-                if ((!m_containers[i].IsNested) ||
-                    (m_containers[i].gameObject.transform.parent != transform)) // exclude not direct childs
+                if ((!_containers[i].IsNested) ||
+                    (_containers[i].gameObject.transform.parent != transform)) // exclude not direct childs
                 {
-                    m_containers.RemoveAt(i--);
+                    _containers.RemoveAt(i--);
                 }
             }
         }
@@ -95,20 +95,20 @@ namespace LazyBot.Audio
         private string Play(int index)
         {
             if ((index < 0) ||
-                (index >= m_audios.Count))
+                (index >= _audios.Count))
                 return string.Empty;
 
-            string audioKey = m_audios[index].InitializeAudioSource(gameObject);
+            string audioKey = _audios[index].InitializeAudioSource(gameObject);
 
             if (audioKey == string.Empty)
                 return string.Empty;
 
-            m_audios[index].Play(audioKey);
+            _audios[index].Play(audioKey);
 
-            if (!m_audios[index].Loop)
+            if (!_audios[index].Loop)
                 RunLater(
-                    () => m_audios[index].DestroyAudioSource(audioKey),
-                    m_audios[index].PlayDelay + ((m_audios[index].PlayTime == 0.0f) ? m_audios[index].AudioLength : m_audios[index].PlayTime)
+                    () => _audios[index].DestroyAudioSource(audioKey),
+                    _audios[index].PlayDelay + ((_audios[index].PlayTime == 0.0f) ? _audios[index].AudioLength : _audios[index].PlayTime)
                 );
 
             return audioKey;
@@ -123,12 +123,12 @@ namespace LazyBot.Audio
         private bool Stop(int index, string audioKey)
         {
             if ((index < 0) ||
-                (index >= m_audios.Count) ||
-                (!m_audios[index].ContainAudio(audioKey)))
+                (index >= _audios.Count) ||
+                (!_audios[index].ContainAudio(audioKey)))
                 return false;
 
-            RunLater(() => m_audios[index].DestroyAudioSource(audioKey),
-                m_audios[index].AudioLength - m_audios[index].Records[audioKey].time);
+            RunLater(() => _audios[index].DestroyAudioSource(audioKey),
+                _audios[index].AudioLength - _audios[index].Records[audioKey].time);
 
             return true;
         }
@@ -142,20 +142,20 @@ namespace LazyBot.Audio
         private string PlayInstant(int index)
         {
             if ((index < 0) ||
-                (index >= m_audios.Count))
+                (index >= _audios.Count))
                 return string.Empty;
 
-            string audioKey = m_audios[index].InitializeAudioSource(gameObject);
+            string audioKey = _audios[index].InitializeAudioSource(gameObject);
 
             if (audioKey == string.Empty)
                 return string.Empty;
 
-            m_audios[index].PlayInstant(audioKey);
+            _audios[index].PlayInstant(audioKey);
 
-            if (!m_audios[index].Loop)
+            if (!_audios[index].Loop)
                 RunLater(
-                    () => m_audios[index].DestroyAudioSource(audioKey),
-                    ((m_audios[index].PlayTime == 0.0f) ? m_audios[index].AudioLength : m_audios[index].PlayTime)
+                    () => _audios[index].DestroyAudioSource(audioKey),
+                    ((_audios[index].PlayTime == 0.0f) ? _audios[index].AudioLength : _audios[index].PlayTime)
                 );
 
             return audioKey;
@@ -170,11 +170,11 @@ namespace LazyBot.Audio
         private bool StopInstant(int index, string audioKey)
         {
             if ((index < 0) ||
-                (index >= m_audios.Count) ||
-                (!m_audios[index].ContainAudio(audioKey)))
+                (index >= _audios.Count) ||
+                (!_audios[index].ContainAudio(audioKey)))
                 return false;
 
-            m_audios[index].DestroyAudioSource(audioKey);
+            _audios[index].DestroyAudioSource(audioKey);
 
             return true;
         }
@@ -189,20 +189,20 @@ namespace LazyBot.Audio
         private string PlayDelayed(int index, float delay)
         {
             if ((index < 0) ||
-                (index >= m_audios.Count))
+                (index >= _audios.Count))
                 return string.Empty;
 
-            string audioKey = m_audios[index].InitializeAudioSource(gameObject);
+            string audioKey = _audios[index].InitializeAudioSource(gameObject);
 
             if (audioKey == string.Empty)
                 return string.Empty;
 
-            m_audios[index].PlayDelayed(audioKey, delay);
+            _audios[index].PlayDelayed(audioKey, delay);
 
-            if (!m_audios[index].Loop)
+            if (!_audios[index].Loop)
                 RunLater(
-                    () => m_audios[index].DestroyAudioSource(audioKey),
-                    delay + ((m_audios[index].PlayTime == 0.0f) ? m_audios[index].AudioLength : m_audios[index].PlayTime)
+                    () => _audios[index].DestroyAudioSource(audioKey),
+                    delay + ((_audios[index].PlayTime == 0.0f) ? _audios[index].AudioLength : _audios[index].PlayTime)
                 );
 
             return audioKey;
@@ -218,11 +218,11 @@ namespace LazyBot.Audio
         private bool StopDelayed(int index, float delay, string audioKey)
         {
             if ((index < 0) ||
-                (index >= m_audios.Count) ||
-                (!m_audios[index].ContainAudio(audioKey)))
+                (index >= _audios.Count) ||
+                (!_audios[index].ContainAudio(audioKey)))
                 return false;
 
-            RunLater(() => m_audios[index].DestroyAudioSource(audioKey), delay);
+            RunLater(() => _audios[index].DestroyAudioSource(audioKey), delay);
 
             return true;
         }
@@ -237,19 +237,19 @@ namespace LazyBot.Audio
         private string Play(int index, float playTime)
         {
             if ((index < 0) ||
-                (index >= m_audios.Count))
+                (index >= _audios.Count))
                 return string.Empty;
 
-            string audioKey = m_audios[index].InitializeAudioSource(gameObject);
+            string audioKey = _audios[index].InitializeAudioSource(gameObject);
 
             if (audioKey == string.Empty)
                 return string.Empty;
 
-            m_audios[index].Play(audioKey);
+            _audios[index].Play(audioKey);
 
             RunLater(
-                () => m_audios[index].DestroyAudioSource(audioKey),
-                m_audios[index].PlayDelay + ((playTime < m_audios[index].AudioLength) ? playTime : m_audios[index].AudioLength)
+                () => _audios[index].DestroyAudioSource(audioKey),
+                _audios[index].PlayDelay + ((playTime < _audios[index].AudioLength) ? playTime : _audios[index].AudioLength)
             );
 
             return audioKey;
@@ -264,19 +264,19 @@ namespace LazyBot.Audio
         private string PlayInstant(int index, float playTime)
         {
             if ((index < 0) ||
-                (index >= m_audios.Count))
+                (index >= _audios.Count))
                 return string.Empty;
 
-            string audioKey = m_audios[index].InitializeAudioSource(gameObject);
+            string audioKey = _audios[index].InitializeAudioSource(gameObject);
 
             if (audioKey == string.Empty)
                 return string.Empty;
 
-            m_audios[index].PlayInstant(audioKey);
+            _audios[index].PlayInstant(audioKey);
 
             RunLater(
-                () => m_audios[index].DestroyAudioSource(audioKey),
-                ((playTime < m_audios[index].AudioLength) ? playTime : m_audios[index].AudioLength)
+                () => _audios[index].DestroyAudioSource(audioKey),
+                ((playTime < _audios[index].AudioLength) ? playTime : _audios[index].AudioLength)
             );
 
             return audioKey;
@@ -292,19 +292,19 @@ namespace LazyBot.Audio
         private string PlayDelayed(int index, float delay, float playTime)
         {
             if ((index < 0) ||
-                (index >= m_audios.Count))
+                (index >= _audios.Count))
                 return string.Empty;
 
-            string audioKey = m_audios[index].InitializeAudioSource(gameObject);
+            string audioKey = _audios[index].InitializeAudioSource(gameObject);
 
             if (audioKey == string.Empty)
                 return string.Empty;
 
-            m_audios[index].PlayDelayed(audioKey, delay);
+            _audios[index].PlayDelayed(audioKey, delay);
 
             RunLater(
-                () => m_audios[index].DestroyAudioSource(audioKey),
-                delay + ((playTime < m_audios[index].AudioLength) ? playTime : m_audios[index].AudioLength)
+                () => _audios[index].DestroyAudioSource(audioKey),
+                delay + ((playTime < _audios[index].AudioLength) ? playTime : _audios[index].AudioLength)
             );
 
             return audioKey;
@@ -345,9 +345,9 @@ namespace LazyBot.Audio
         /// <returns>MD5 hash key of audio.</returns>
         public string Play(string audioName, bool searchInNested = true, bool onlyDirect = true)
         {
-            for (int i = 0; i < m_audios.Count; i++)
+            for (int i = 0; i < _audios.Count; i++)
             {
-                if (m_audios[i].Name == audioName)
+                if (_audios[i].Name == audioName)
                 {
                     return Play(i);
                 }
@@ -355,9 +355,9 @@ namespace LazyBot.Audio
 
             if (!searchInNested) return string.Empty;
 
-            for (int i = 0; i < m_containers.Count; i++)
+            for (int i = 0; i < _containers.Count; i++)
             {
-                string audioKey = m_containers[i].Play(audioName, !onlyDirect, false);
+                string audioKey = _containers[i].Play(audioName, !onlyDirect, false);
 
                 if (audioKey != string.Empty)
                     return audioKey;
@@ -376,9 +376,9 @@ namespace LazyBot.Audio
         /// <returns>Is audio was found and stop is executable.</returns>
         public bool Stop(string audioName, string audioKey, bool searchInNested = true, bool onlyDirect = true)
         {
-            for (int i = 0; i < m_audios.Count; i++)
+            for (int i = 0; i < _audios.Count; i++)
             {
-                if (m_audios[i].Name == audioName)
+                if (_audios[i].Name == audioName)
                 {
                     return Stop(i, audioKey);
                 }
@@ -386,9 +386,9 @@ namespace LazyBot.Audio
 
             if (!searchInNested) return false;
 
-            for (int i = 0; i < m_containers.Count; i++)
+            for (int i = 0; i < _containers.Count; i++)
             {
-                if (m_containers[i].Stop(audioName, audioKey, !onlyDirect, false))
+                if (_containers[i].Stop(audioName, audioKey, !onlyDirect, false))
                 {
                     return true;
                 }
@@ -407,9 +407,9 @@ namespace LazyBot.Audio
         /// <returns>MD5 hash key of audio.</returns>
         public string PlayInstant(string audioName, bool searchInNested = true, bool onlyDirect = true)
         {
-            for (int i = 0; i < m_audios.Count; i++)
+            for (int i = 0; i < _audios.Count; i++)
             {
-                if (m_audios[i].Name == audioName)
+                if (_audios[i].Name == audioName)
                 {
                     return PlayInstant(i);
                 }
@@ -417,9 +417,9 @@ namespace LazyBot.Audio
 
             if (!searchInNested) return string.Empty;
 
-            for (int i = 0; i < m_containers.Count; i++)
+            for (int i = 0; i < _containers.Count; i++)
             {
-                string audioKey = m_containers[i].PlayInstant(audioName, !onlyDirect, false);
+                string audioKey = _containers[i].PlayInstant(audioName, !onlyDirect, false);
 
                 if (audioKey != string.Empty)
                     return audioKey;
@@ -438,9 +438,9 @@ namespace LazyBot.Audio
         /// <returns>Is audio was found and stop is executable.</returns>
         public bool StopInstant(string audioName, string audioKey, bool searchInNested = true, bool onlyDirect = true)
         {
-            for (int i = 0; i < m_audios.Count; i++)
+            for (int i = 0; i < _audios.Count; i++)
             {
-                if (m_audios[i].Name == audioName)
+                if (_audios[i].Name == audioName)
                 {
                     return StopInstant(i, audioKey);
                 }
@@ -448,9 +448,9 @@ namespace LazyBot.Audio
 
             if (!searchInNested) return false;
 
-            for (int i = 0; i < m_containers.Count; i++)
+            for (int i = 0; i < _containers.Count; i++)
             {
-                if (m_containers[i].StopInstant(audioName, audioKey, !onlyDirect, false))
+                if (_containers[i].StopInstant(audioName, audioKey, !onlyDirect, false))
                 {
                     return true;
                 }
@@ -470,9 +470,9 @@ namespace LazyBot.Audio
         /// <returns>MD5 hash key of audio.</returns>
         public string PlayDelayed(string audioName, float delay, bool searchInNested = true, bool onlyDirect = true)
         {
-            for (int i = 0; i < m_audios.Count; i++)
+            for (int i = 0; i < _audios.Count; i++)
             {
-                if (m_audios[i].Name == audioName)
+                if (_audios[i].Name == audioName)
                 {
                     return PlayDelayed(i, delay);
                 }
@@ -480,9 +480,9 @@ namespace LazyBot.Audio
 
             if (!searchInNested) return string.Empty;
 
-            for (int i = 0; i < m_containers.Count; i++)
+            for (int i = 0; i < _containers.Count; i++)
             {
-                string audioKey = m_containers[i].PlayDelayed(audioName, delay, !onlyDirect, false);
+                string audioKey = _containers[i].PlayDelayed(audioName, delay, !onlyDirect, false);
 
                 if (audioKey != string.Empty)
                     return audioKey;
@@ -502,9 +502,9 @@ namespace LazyBot.Audio
         /// <returns>Is audio was found and stop is executable.</returns>
         public bool StopDelayed(string audioName, float delay, string audioKey, bool searchInNested = true, bool onlyDirect = true)
         {
-            for (int i = 0; i < m_audios.Count; i++)
+            for (int i = 0; i < _audios.Count; i++)
             {
-                if (m_audios[i].Name == audioName)
+                if (_audios[i].Name == audioName)
                 {
                     return StopDelayed(i, delay, audioKey);
                 }
@@ -512,9 +512,9 @@ namespace LazyBot.Audio
 
             if (!searchInNested) return false;
 
-            for (int i = 0; i < m_containers.Count; i++)
+            for (int i = 0; i < _containers.Count; i++)
             {
-                if (m_containers[i].StopDelayed(audioName, delay, audioKey, !onlyDirect, false))
+                if (_containers[i].StopDelayed(audioName, delay, audioKey, !onlyDirect, false))
                 {
                     return true;
                 }
@@ -534,9 +534,9 @@ namespace LazyBot.Audio
         /// <returns>MD5 hash key of audio.</returns>
         public string Play(string audioName, float playTime, bool searchInNested = true, bool onlyDirect = true)
         {
-            for (int i = 0; i < m_audios.Count; i++)
+            for (int i = 0; i < _audios.Count; i++)
             {
-                if (m_audios[i].Name == audioName)
+                if (_audios[i].Name == audioName)
                 {
                     return Play(i, playTime);
                 }
@@ -544,9 +544,9 @@ namespace LazyBot.Audio
 
             if (!searchInNested) return string.Empty;
 
-            for (int i = 0; i < m_containers.Count; i++)
+            for (int i = 0; i < _containers.Count; i++)
             {
-                string audioKey = m_containers[i].Play(audioName, playTime, !onlyDirect, false);
+                string audioKey = _containers[i].Play(audioName, playTime, !onlyDirect, false);
 
                 if (audioKey != string.Empty)
                     return audioKey;
@@ -565,9 +565,9 @@ namespace LazyBot.Audio
         /// <returns>MD5 hash key of audio.</returns>
         public string PlayInstant(string audioName, float playTime, bool searchInNested = true, bool onlyDirect = true)
         {
-            for (int i = 0; i < m_audios.Count; i++)
+            for (int i = 0; i < _audios.Count; i++)
             {
-                if (m_audios[i].Name == audioName)
+                if (_audios[i].Name == audioName)
                 {
                     return PlayInstant(i, playTime);
                 }
@@ -575,9 +575,9 @@ namespace LazyBot.Audio
 
             if (!searchInNested) return string.Empty;
 
-            for (int i = 0; i < m_containers.Count; i++)
+            for (int i = 0; i < _containers.Count; i++)
             {
-                string audioKey = m_containers[i].PlayInstant(audioName, playTime, !onlyDirect, false);
+                string audioKey = _containers[i].PlayInstant(audioName, playTime, !onlyDirect, false);
 
                 if (audioKey != string.Empty)
                     return audioKey;
@@ -597,9 +597,9 @@ namespace LazyBot.Audio
         /// <returns>MD5 hash key of audio.</returns>
         public string PlayDelayed(string audioName, float delay, float playTime, bool searchInNested = true, bool onlyDirect = true)
         {
-            for (int i = 0; i < m_audios.Count; i++)
+            for (int i = 0; i < _audios.Count; i++)
             {
-                if (m_audios[i].Name == audioName)
+                if (_audios[i].Name == audioName)
                 {
                     return PlayDelayed(i, delay, playTime);
                 }
@@ -607,9 +607,9 @@ namespace LazyBot.Audio
 
             if (!searchInNested) return string.Empty;
 
-            for (int i = 0; i < m_containers.Count; i++)
+            for (int i = 0; i < _containers.Count; i++)
             {
-                string audioKey = m_containers[i].PlayDelayed(audioName, delay, playTime, !onlyDirect, false);
+                string audioKey = _containers[i].PlayDelayed(audioName, delay, playTime, !onlyDirect, false);
 
                 if (audioKey != string.Empty)
                     return audioKey;
@@ -630,17 +630,17 @@ namespace LazyBot.Audio
         {
             float noise = 0.0f, noiseT;
 
-            for (int i = 0; i < m_audios.Count; i++)
+            for (int i = 0; i < _audios.Count; i++)
             {
-                noiseT = m_audios[i].GetAudibility(source, listener);
+                noiseT = _audios[i].GetAudibility(source, listener);
                 if (noiseT > noise) noise = noiseT;
             }
 
             if (!searchInNested) return noise;
 
-            for (int i = 0; i < m_containers.Count; i++)
+            for (int i = 0; i < _containers.Count; i++)
             {
-                noiseT = m_containers[i].GetAudibility(source, listener, !onlyDirect, false);
+                noiseT = _containers[i].GetAudibility(source, listener, !onlyDirect, false);
                 if (noiseT > noise) noise = noiseT;
             }
 
@@ -659,20 +659,20 @@ namespace LazyBot.Audio
         {
             float noise = 0.0f, noiseT;
 
-            for (int i = 0; i < m_audios.Count; i++)
+            for (int i = 0; i < _audios.Count; i++)
             {
-                noiseT = m_audios[i].GetAudibility(transform.position, listener);
+                noiseT = _audios[i].GetAudibility(transform.position, listener);
                 if (noiseT > noise) noise = noiseT;
             }
 
             if (!searchInNested) return noise;
 
-            for (int i = 0; i < m_containers.Count; i++)
+            for (int i = 0; i < _containers.Count; i++)
             {
                 if (attentionToChildPosition)
-                    noiseT = m_containers[i].GetAudibility(listener, attentionToChildPosition, !onlyDirect, false);
+                    noiseT = _containers[i].GetAudibility(listener, attentionToChildPosition, !onlyDirect, false);
                 else
-                    noiseT = m_containers[i].GetAudibility(transform.position, listener, !onlyDirect, false);
+                    noiseT = _containers[i].GetAudibility(transform.position, listener, !onlyDirect, false);
 
                 if (noiseT > noise) noise = noiseT;
             }

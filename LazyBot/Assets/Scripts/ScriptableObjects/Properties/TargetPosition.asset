@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bb51bffe3ffb1f429f229eb2c9191f5, type: 3}
   m_Name: TargetPosition
   m_EditorClassIdentifier: 
-  m_data:
+  _data:
     Name: Position
     Id: 0

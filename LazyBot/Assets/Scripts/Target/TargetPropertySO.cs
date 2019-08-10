@@ -8,15 +8,15 @@ namespace LazyBot.Target.Property
     /// </summary>
     public abstract class TargetPropertySO : ScriptableObject
     {        
-        [SerializeField] private PropertyContacts m_data;
+        [SerializeField] private PropertyContacts _data;
 
         public string Name
         {
-            get { return this.m_data.Name; }
+            get { return this._data.Name; }
         }
         public uint Id
         {
-            get { return this.m_data.Id; }
+            get { return this._data.Id; }
         }
 
 

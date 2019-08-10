@@ -94,8 +94,8 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
-    m_ShowResolutionOverlay: 1
     m_ExportTrainingData: 0
+    m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 112000000, guid: 75d1efe9f25e1ed4abc1377accee87da,
     type: 2}
   m_UseShadowmask: 1
@@ -305,6 +305,98 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &400432884
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 400432888}
+  - component: {fileID: 400432887}
+  - component: {fileID: 400432886}
+  - component: {fileID: 400432885}
+  m_Layer: 0
+  m_Name: Floor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &400432885
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 400432884}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &400432886
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 400432884}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 5a3bc25e420cc3f4a985402a2c3faec3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &400432887
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 400432884}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &400432888
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 400432884}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalScale: {x: 20, y: 0.2, z: 20}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &437914623
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,13 +587,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534669902}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: -0.2113091, y: 0.78488564, z: -0.36599812, w: -0.45315394}
+  m_LocalPosition: {x: 10, y: 10, z: 8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 50, y: 240, z: 0}
 --- !u!4 &1004651999 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1042096299691654446, guid: 3da8b3cb53eeef146ba93dd62ac8358d,
@@ -565,6 +657,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -632,43 +725,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef1f17201ea97114880624dfe1d7cf78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ownerTransform: {fileID: 0}
-  m_points:
-  - m_type: 1
-    m_action: 1
-    m_priority: 0
-    m_point: {fileID: 1042096299714369614}
-    m_transferDelay: 0
-    m_minImpactSpeed: 0
-    m_animationSpeed: 1
-    m_movementSpeed: 1
-    m_accuracyRadius: 1
-    m_impactRadius: 2
-  - m_type: 1
-    m_action: 2
-    m_priority: 0
-    m_point: {fileID: 150881314}
-    m_transferDelay: 3
-    m_minImpactSpeed: 1
-    m_animationSpeed: 1
-    m_movementSpeed: 1
-    m_accuracyRadius: 1
-    m_impactRadius: 2
-  - m_type: 1
-    m_action: 1
-    m_priority: 0
-    m_point: {fileID: 471915861}
-    m_transferDelay: 0
-    m_minImpactSpeed: 1
-    m_animationSpeed: 1
-    m_movementSpeed: 1
-    m_accuracyRadius: 1
-    m_impactRadius: 2
-  m_isRandom: 0
-  m_startupPoint: 0
-  m_impactColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  m_accuracyColor: {r: 1, g: 0, b: 0, a: 1}
-  m_lineColor: {r: 0, g: 1, b: 0, a: 1}
+  _ownerTransform: {fileID: 0}
+  _points:
+  - _type: 1
+    _action: 1
+    _priority: 0
+    _point: {fileID: 1042096299714369614}
+    _transferDelay: 0
+    _minImpactSpeed: 0
+    _animationSpeed: 1
+    _movementSpeed: 1
+    _accuracyRadius: 1
+    _impactRadius: 2
+  - _type: 1
+    _action: 2
+    _priority: 0
+    _point: {fileID: 150881314}
+    _transferDelay: 3
+    _minImpactSpeed: 0
+    _animationSpeed: 1
+    _movementSpeed: 1
+    _accuracyRadius: 1
+    _impactRadius: 2
+  - _type: 1
+    _action: 1
+    _priority: 0
+    _point: {fileID: 471915861}
+    _transferDelay: 0
+    _minImpactSpeed: 0
+    _animationSpeed: 1
+    _movementSpeed: 1
+    _accuracyRadius: 1
+    _impactRadius: 2
+  _isRandom: 0
+  _startupPoint: 0
+  _impactColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  _accuracyColor: {r: 1, g: 0, b: 0, a: 1}
+  _lineColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!4 &1121714424
 Transform:
   m_ObjectHideFlags: 0
@@ -696,16 +789,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9c71204fec9e134d9b4f3fcc9ef58ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_audios: {fileID: 1121714426}
-  m_vizualize: 0
-  m_drawDetection: 1
-  m_drawOnSelected: 1
-  m_drawZone: 0
-  m_step: 10
-  m_alpha: 0.05
-  m_colorZone: {r: 0, g: 0, b: 0, a: 1}
-  m_colorNoiseBad: {r: 1, g: 0, b: 0, a: 1}
-  m_colorNoiseGood: {r: 0, g: 1, b: 0, a: 1}
+  _audios: {fileID: 1121714426}
+  _vizualize: 0
+  _drawDetection: 1
+  _drawOnSelected: 1
+  _drawZone: 0
+  _step: 10
+  _alpha: 0.05
+  _colorZone: {r: 0, g: 0, b: 0, a: 1}
+  _colorNoiseBad: {r: 1, g: 0, b: 0, a: 1}
+  _colorNoiseGood: {r: 0, g: 1, b: 0, a: 1}
 --- !u!114 &1121714426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -718,81 +811,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10907a3d7e0a81043a6b3390157406de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_name: Sounds
-  m_isAccommodate: 1
-  m_isActive: 1
-  m_isNested: 1
-  m_audios:
-  - m_name: First
-    m_output: {fileID: 0}
-    m_audioClip: {fileID: 0}
-    m_loop: 0
-    m_mute: 0
-    m_playDelay: 0
-    m_reverbZoneMix: 0
-    m_playTime: 0
-    m_pitch: 0
-    m_volume: 0
-    m_spatialBlend: 0
-    m_settingDetection:
-      m_loudness: 15
-      m_maxDistance: 10
-      m_minDistance: 0
-      m_cutOnMin: 0
-      m_cutOnMax: 0
-      m_loudnessSpread:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 1
-          inSlope: -1
-          outSlope: -1
-          tangentMode: 34
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 1
-          value: -0.00000005052425
-          inSlope: -1
-          outSlope: -1
-          tangentMode: 34
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 0
-    m_setting3D:
-      m_maxDistance: 5
-      m_minDistance: 0
-      m_dopplerLevel: 0
-      m_spread: 0
-      m_volumeSpread:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 1
-          inSlope: -1
-          outSlope: -1
-          tangentMode: 34
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 1
-          value: -0.00000005052425
-          inSlope: -1
-          outSlope: -1
-          tangentMode: 34
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 0
+  _name: Sounds
+  _isAccommodate: 1
+  _isActive: 1
+  _isNested: 1
+  _audios: []
 --- !u!114 &1121714428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -805,23 +828,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8c3533a135aa444288623f983bf1858, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_activeState: 0
-  m_pathUpdateDelay: 1
-  m_states:
-  - m_priority: 0
-    m_isBlockingOnSleep: 0
-    m_isBlocking: 0
-    m_checkOnActive:
-      m_values: 2/1/0/-1
-    m_state: {fileID: 11400000, guid: 855a80e90643d58408b40384d34bf7cf, type: 2}
-  - m_priority: 0
-    m_isBlockingOnSleep: 0
-    m_isBlocking: 0
-    m_checkOnActive:
-      m_values: 2/1/0/-1
-    m_state: {fileID: 11400000, guid: f193a6c82a5411e4996ca73504ab718e, type: 2}
-  m_angularSpeed: 90
-  m_maxMovementSpeed: 5
+  _activeState: 0
+  _pathUpdateDelay: 1
+  _statesSteady: []
+  _states:
+  - _priority: 0
+    _isBlockingOnSleep: 0
+    _isBlocking: 0
+    _checkOnActive:
+      _values: 2/1/0/-1
+    _state: {fileID: 11400000, guid: 855a80e90643d58408b40384d34bf7cf, type: 2}
+  - _priority: 0
+    _isBlockingOnSleep: 0
+    _isBlocking: 0
+    _checkOnActive:
+      _values: 2/1/0/-1
+    _state: {fileID: 11400000, guid: f193a6c82a5411e4996ca73504ab718e, type: 2}
+  _angularSpeed: 90
+  _maxMovementSpeed: 5
 --- !u!114 &1121714429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -834,45 +858,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09eb105d6fbd7e54c891e129e1ccf6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_health:
-    m_isLock: 0
-    m_isUnlimited: 0
-    m_isRegenerate: 1
-    m_value: 0
-    m_valueStart: 0
-    m_valueRegenerateRate: 0
-    m_valueLow: 0
-    m_valueMax: 0
-    m_valueMin: 0
-    m_slider: {fileID: 0}
-  m_stamina:
-    m_isLock: 0
-    m_isUnlimited: 0
-    m_isRegenerate: 1
-    m_value: 0
-    m_valueStart: 0
-    m_valueRegenerateRate: 0
-    m_valueLow: 0
-    m_valueMax: 0
-    m_valueMin: 0
-    m_slider: {fileID: 0}
-  m_trackingPoint:
-    m_type: 0
-    m_action: 0
-    m_priority: 0
-    m_point: {fileID: 0}
-    m_transferDelay: 0
-    m_minImpactSpeed: 0
-    m_animationSpeed: 0
-    m_movementSpeed: 0
-    m_accuracyRadius: 0
-    m_impactRadius: 0
-  m_onDamage:
+  _health:
+    _isLock: 0
+    _isUnlimited: 0
+    _isRegenerate: 1
+    _value: 0
+    _valueStart: 0
+    _valueRegenerateRate: 0
+    _valueLow: 0
+    _valueMax: 0
+    _valueMin: 0
+    _slider: {fileID: 0}
+  _stamina:
+    _isLock: 0
+    _isUnlimited: 0
+    _isRegenerate: 1
+    _value: 0
+    _valueStart: 0
+    _valueRegenerateRate: 0
+    _valueLow: 0
+    _valueMax: 0
+    _valueMin: 0
+    _slider: {fileID: 0}
+  _trackingPoint:
+    _type: 0
+    _action: 0
+    _priority: 0
+    _point: {fileID: 0}
+    _transferDelay: 0
+    _minImpactSpeed: 0
+    _animationSpeed: 0
+    _movementSpeed: 0
+    _accuracyRadius: 0
+    _impactRadius: 0
+  _onDamage:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_onDeath:
+  _onDeath:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1121714428}
@@ -921,14 +945,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d255a7fa8ddbc444b8b2702a596b9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_name: Bone
-  m_state: 1
-  m_owner: {fileID: 1589007047}
-  m_damageMultiplier: 1
-  m_gizmoColorInactive: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  m_gizmoColorActive: {r: 0, g: 0, b: 1, a: 1}
-  m_gizmoColorFound: {r: 1, g: 0, b: 0, a: 1}
-  m_gizmoSize: 1
+  _name: Bone
+  _state: 1
+  _owner: {fileID: 1589007047}
+  _damageMultiplier: 1
+  _gizmoColorInactive: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  _gizmoColorActive: {r: 0, g: 0, b: 1, a: 1}
+  _gizmoColorFound: {r: 1, g: 0, b: 0, a: 1}
+  _gizmoSize: 1
 --- !u!4 &1589007044
 Transform:
   m_ObjectHideFlags: 0
@@ -968,58 +992,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09eb105d6fbd7e54c891e129e1ccf6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_health:
-    m_isLock: 0
-    m_isUnlimited: 0
-    m_isRegenerate: 1
-    m_value: 0
-    m_valueStart: 0
-    m_valueRegenerateRate: 0
-    m_valueLow: 0
-    m_valueMax: 0
-    m_valueMin: 0
-    m_slider: {fileID: 0}
-  m_stamina:
-    m_isLock: 0
-    m_isUnlimited: 0
-    m_isRegenerate: 1
-    m_value: 0
-    m_valueStart: 0
-    m_valueRegenerateRate: 0
-    m_valueLow: 0
-    m_valueMax: 0
-    m_valueMin: 0
-    m_slider: {fileID: 0}
-  m_trackingPoint:
-    m_type: 0
-    m_action: 0
-    m_priority: 0
-    m_point: {fileID: 0}
-    m_transferDelay: 0
-    m_minImpactSpeed: 0
-    m_animationSpeed: 0
-    m_movementSpeed: 0
-    m_accuracyRadius: 0
-    m_impactRadius: 0
-  m_onDamage:
+  _health:
+    _isLock: 0
+    _isUnlimited: 0
+    _isRegenerate: 1
+    _value: 0
+    _valueStart: 0
+    _valueRegenerateRate: 0
+    _valueLow: 0
+    _valueMax: 0
+    _valueMin: 0
+    _slider: {fileID: 0}
+  _stamina:
+    _isLock: 0
+    _isUnlimited: 0
+    _isRegenerate: 1
+    _value: 0
+    _valueStart: 0
+    _valueRegenerateRate: 0
+    _valueLow: 0
+    _valueMax: 0
+    _valueMin: 0
+    _slider: {fileID: 0}
+  _trackingPoint:
+    _type: 0
+    _action: 0
+    _priority: 0
+    _point: {fileID: 0}
+    _transferDelay: 0
+    _minImpactSpeed: 0
+    _animationSpeed: 0
+    _movementSpeed: 0
+    _accuracyRadius: 0
+    _impactRadius: 0
+  _onDamage:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_onDeath:
+  _onDeath:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: Death
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1589007047
@@ -1034,11 +1047,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8c3533a135aa444288623f983bf1858, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_activeState: 0
-  m_pathUpdateDelay: 0
-  m_states: []
-  m_angularSpeed: 0
-  m_maxMovementSpeed: 0
+  _activeState: 0
+  _pathUpdateDelay: 0
+  _statesSteady: []
+  _states: []
+  _angularSpeed: 0
+  _maxMovementSpeed: 0
 --- !u!114 &1589007048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1051,7 +1065,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0432fa84fbd5ae84ca40151e05a73968, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_tracingAreas:
+  _tracingAreas:
   - {fileID: 1589007043}
 --- !u!1 &1899071590
 GameObject:
@@ -1125,6 +1139,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1157,28 +1172,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcc984f60d14ecd4eaa83e8be9e956d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_type: 3
-  m_targetType: {fileID: 11400000, guid: 8d800aa2f5ab257429ef206fac1b7d83, type: 2}
-  m_updateRate:
+  _type: 3
+  _targetType: {fileID: 11400000, guid: 8d800aa2f5ab257429ef206fac1b7d83, type: 2}
+  _updateRate:
     UseConstant: 1
     ConstantValue: 1
-    Variable: {fileID: 11400000, guid: b6767e4f02645fe4ca54e50cfce48317, type: 2}
-  m_priority: 0
-  m_onTargetDetection:
+    Variable: {fileID: 0}
+  _priority: 0
+  _onTargetDetection:
   - {fileID: 11400000, guid: 983bacd13c3ae9240bc2d2b6e634d883, type: 2}
   - {fileID: 11400000, guid: 7e0677fd0d4b3324aa54ebe03c9690c8, type: 2}
   - {fileID: 11400000, guid: e6b43720ec4eae9499d236a41c8f3320, type: 2}
   - {fileID: 11400000, guid: a72c35a0bf2795b40bc92ecaa4ac7ba9, type: 2}
   - {fileID: 11400000, guid: 6659ba1155f7d084791395c160dc7d6c, type: 2}
-  m_onInit:
+  _onInit:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_MethodName: ValidateArea
-        m_Mode: 0
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1186,7 +1201,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: LazyBot.Area.Searching.SearchingArea+SearchingAreaEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_onTargetUpdate:
+  _onTargetUpdate:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: 1d17a14e2b1525c47a5b3e0675777c33, type: 2}
@@ -1213,7 +1228,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: LazyBot.Area.Searching.SearchingArea+TargetUpdateEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_onTargetClear:
+  _onTargetClear:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1121714428}
@@ -1229,7 +1244,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: LazyBot.Area.Searching.SearchingArea+SearchingAreaEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_onDrawGizmo:
+  _onDrawGizmo:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: 597caa50af0cadf4baba5a85772bec96, type: 2}
@@ -1245,19 +1260,19 @@ MonoBehaviour:
         m_CallState: 1
     m_TypeName: LazyBot.Area.Searching.SearchingArea+SearchingAreaEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_data:
-    m_socket: {fileID: 1121714424}
-    m_offset: {x: 0, y: 1, z: 0}
-    m_rotation: {x: 0, y: 0, z: 0}
-    m_radius: 11
-    m_angle: 90
-    m_obstacleMask:
+  _data:
+    _socket: {fileID: 1121714424}
+    _offset: {x: 0, y: 1, z: 0}
+    _rotation: {x: 0, y: 0, z: 0}
+    _radius: 11
+    _angle: 90
+    _obstacleMask:
       serializedVersion: 2
       m_Bits: 512
-    m_targetMask:
+    _targetMask:
       serializedVersion: 2
       m_Bits: 1024
-    m_enemyTags:
+    _enemyTags:
     - Enemy
 --- !u!1001 &1042096299714369613
 PrefabInstance:
@@ -1355,17 +1370,17 @@ PrefabInstance:
     - target: {fileID: 4710564334530052929, guid: fbd67ff4ee73cdf4abbc76352032a1df,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.23292255
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4710564334530052929, guid: fbd67ff4ee73cdf4abbc76352032a1df,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.14585972
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4710564334530052929, guid: fbd67ff4ee73cdf4abbc76352032a1df,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.30971718
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4710564334530052929, guid: fbd67ff4ee73cdf4abbc76352032a1df,
         type: 3}
@@ -1475,6 +1490,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4094123198603996607, guid: f60670dbc14a09748b78f14d95b258f8,
+        type: 3}
+      propertyPath: _updateRate.ConstantValue
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f60670dbc14a09748b78f14d95b258f8, type: 3}

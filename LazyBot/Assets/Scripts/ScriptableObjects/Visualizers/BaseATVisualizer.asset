@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffd3c117c4b08c445a78a2d36a851716, type: 3}
   m_Name: BaseATVisualizer
   m_EditorClassIdentifier: 
-  m_lineColor: {r: 1, g: 0, b: 0, a: 1}
-  m_lineLifetime:
+  _lineColor: {r: 1, g: 0, b: 0, a: 1}
+  _lineLifetime:
     UseConstant: 0
     ConstantValue: 0
     Variable: {fileID: 11400000, guid: 25d6620147ef31145a66996439453bc0, type: 2}

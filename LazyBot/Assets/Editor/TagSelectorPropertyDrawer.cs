@@ -17,7 +17,7 @@ public class TagSelectorPropertyDrawer : PropertyDrawer
         EditorGUI.BeginProperty(position, label, property);
 
         // If activated default drawing option
-        if ((this.attribute as TagSelectorAttribute).m_useDefaultTagDrawer)
+        if ((this.attribute as TagSelectorAttribute)._useDefaultTagDrawer)
         {
             property.stringValue = EditorGUI.TagField(position, label, property.stringValue);
         }

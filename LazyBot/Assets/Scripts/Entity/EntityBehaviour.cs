@@ -8,106 +8,106 @@ namespace LazyBot.Entity
     /// </summary>
     public class EntityBehaviour : MonoBehaviour
     {
-        [SerializeField] private LazyBot.Entity.Data.SliderFloatEntityData m_health;
-        [SerializeField] private LazyBot.Entity.Data.SliderFloatEntityData m_stamina;
+        [SerializeField] private LazyBot.Entity.Data.SliderFloatEntityData _health;
+        [SerializeField] private LazyBot.Entity.Data.SliderFloatEntityData _stamina;
 
         /// <summary>
         /// Point in scene used to chase the target.
         /// </summary>
-        [SerializeField] private LazyBot.Navigation.Data.NavigationPoint m_trackingPoint;
+        [SerializeField] private LazyBot.Navigation.Data.NavigationPoint _trackingPoint;
 
         /// <summary>
         /// Triggers on damage taken.
         /// </summary>
-        [SerializeField] private UnityEvent m_onDamage;
+        [SerializeField] private UnityEvent _onDamage;
         /// <summary>
         /// Triggers on death.
         /// </summary>
-        [SerializeField] private UnityEvent m_onDeath;
+        [SerializeField] private UnityEvent _onDeath;
 
-        private static uint m_idCounter = 0;
-        private bool m_isDeath;
-        private uint m_id;
+        private static uint _idCounter = 0;
+        private bool _isDeath;
+        private uint _id;
 
         /// <summary>
         /// Point in scene used to chase the target.
         /// </summary>
         public LazyBot.Navigation.Data.NavigationPoint TrackingPoint
         {
-            get { return this.m_trackingPoint; }
+            get { return this._trackingPoint; }
         }
         public bool IsDeath
         {
-            get { return this.m_isDeath; }
+            get { return this._isDeath; }
         }
         public uint Id
         {
-            get { return this.m_id; }
+            get { return this._id; }
         }
 
 
         protected virtual void Awake()
         {
-            m_id = m_idCounter++;
+            _id = _idCounter++;
         }
 
         protected virtual void Update()
         {
-            if (m_isDeath) return;
+            if (_isDeath) return;
 
-            m_stamina.Regenerate(Time.deltaTime);
-            m_health.Regenerate(Time.deltaTime);
+            _stamina.Regenerate(Time.deltaTime);
+            _health.Regenerate(Time.deltaTime);
         }
 
 
         protected virtual void Death()
         {
-            m_stamina.IsLock = true;
-            m_health.IsLock = true;
-            m_isDeath = true;
+            _stamina.IsLock = true;
+            _health.IsLock = true;
+            _isDeath = true;
 
-            m_onDeath.Invoke();
+            _onDeath.Invoke();
         }
 
 
         public void Damage(float damage)
         {
-            if (m_isDeath) return;
+            if (_isDeath) return;
 
-            m_health.Change(-damage, true);
+            _health.Change(-damage, true);
 
-            if ((m_health.IsLow) &&
-                ((!m_isDeath) && (!m_health.IsUnlimited)))
+            if ((_health.IsLow) &&
+                ((!_isDeath) && (!_health.IsUnlimited)))
                 Death();
-            else m_onDamage.Invoke();
+            else _onDamage.Invoke();
         }
 
         public bool DoHealthAction(int healthConsumption)
         {
-            if (m_isDeath) return false;
+            if (_isDeath) return false;
 
-            return m_health.Change(-healthConsumption);
+            return _health.Change(-healthConsumption);
         }
 
         public bool IsHealthAction(int healthConsumption)
         {
-            if (m_isDeath) return false;
+            if (_isDeath) return false;
 
-            return m_health.IsChangable(-healthConsumption);
+            return _health.IsChangable(-healthConsumption);
         }
 
         public bool DoStaminaAction(int staminaCosumption)
         {
-            if (m_isDeath) return false;
+            if (_isDeath) return false;
 
-            return m_stamina.Change(-staminaCosumption);
+            return _stamina.Change(-staminaCosumption);
         }
 
         public bool IsStaminaAction(int staminaCosumption)
         {
-            if (m_isDeath) return false;
+            if (_isDeath) return false;
 
-            return m_stamina.IsChangable(-staminaCosumption);
+            return _stamina.IsChangable(-staminaCosumption);
         }
     }
 }

@@ -9,60 +9,60 @@ namespace LazyBot.Visualizer
     /// </summary>
     public class AudioSourceVisualizer : MonoBehaviour
     {
-        [SerializeField] private LazyBot.Audio.AudioContainer m_audios;
+        [SerializeField] private LazyBot.Audio.AudioContainer _audios;
 
         /// <summary>
         /// Is transition visualized or drawn as two siple circle.
         /// </summary>
-        [SerializeField] private bool m_vizualize = true;
+        [SerializeField] private bool _vizualize = true;
         /// <summary>
         /// Is drawn detection or 3D.
         /// </summary>
-        [SerializeField] private bool m_drawDetection = true;
+        [SerializeField] private bool _drawDetection = true;
         /// <summary>
         /// Is drawn only when selected.
         /// </summary>
-        [SerializeField] private bool m_drawOnSelected = true;
+        [SerializeField] private bool _drawOnSelected = true;
 
         /// <summary>
         /// Index of drawn audio.
         /// </summary>
-        [SerializeField] private int m_drawZone = 0;
+        [SerializeField] private int _drawZone = 0;
         /// <summary>
         /// Count of steps, on visualizations.
         /// </summary>
-        [SerializeField] [Range(0.1f, sbyte.MaxValue)] private int m_step = 10;
-        [SerializeField] [Range(0.0f, 1.0f)] private float m_alpha = 0.05f;
+        [SerializeField] [Range(0.1f, sbyte.MaxValue)] private int _step = 10;
+        [SerializeField] [Range(0.0f, 1.0f)] private float _alpha = 0.05f;
 
-        [SerializeField] private Color m_colorZone = Color.black;
-        [SerializeField] private Color m_colorNoiseBad = Color.red;
-        [SerializeField] private Color m_colorNoiseGood = Color.green;
+        [SerializeField] private Color _colorZone = Color.black;
+        [SerializeField] private Color _colorNoiseBad = Color.red;
+        [SerializeField] private Color _colorNoiseGood = Color.green;
 
 
         private void OnDrawGizmos()
         {
-            if ((!m_audios) || 
-                (m_drawOnSelected) ||
-                (m_audios.Audios.Count == 0) ||
-                ((m_drawZone < 0) || (m_drawZone >= m_audios.Audios.Count))) return;
+            if ((!_audios) || 
+                (_drawOnSelected) ||
+                (_audios.Audios.Count == 0) ||
+                ((_drawZone < 0) || (_drawZone >= _audios.Audios.Count))) return;
 
-            if (m_drawDetection)
-                DrawZone(m_audios.Audios[m_drawZone].InnerRadiusDetection, m_audios.Audios[m_drawZone].OutherRadiusDetection);
+            if (_drawDetection)
+                DrawZone(_audios.Audios[_drawZone].InnerRadiusDetection, _audios.Audios[_drawZone].OutherRadiusDetection);
             else
-                DrawZone(m_audios.Audios[m_drawZone].InnerRadius3D, m_audios.Audios[m_drawZone].OutherRadius3D);
+                DrawZone(_audios.Audios[_drawZone].InnerRadius3D, _audios.Audios[_drawZone].OutherRadius3D);
         }
 
         private void OnDrawGizmosSelected()
         {
-            if ((!m_audios) ||
-                (!m_drawOnSelected) ||
-                (m_audios.Audios.Count == 0) ||
-                ((m_drawZone < 0) || (m_drawZone >= m_audios.Audios.Count))) return;
+            if ((!_audios) ||
+                (!_drawOnSelected) ||
+                (_audios.Audios.Count == 0) ||
+                ((_drawZone < 0) || (_drawZone >= _audios.Audios.Count))) return;
 
-            if (m_drawDetection)
-                DrawZone(m_audios.Audios[m_drawZone].InnerRadiusDetection, m_audios.Audios[m_drawZone].OutherRadiusDetection);
+            if (_drawDetection)
+                DrawZone(_audios.Audios[_drawZone].InnerRadiusDetection, _audios.Audios[_drawZone].OutherRadiusDetection);
             else
-                DrawZone(m_audios.Audios[m_drawZone].InnerRadius3D, m_audios.Audios[m_drawZone].OutherRadius3D);
+                DrawZone(_audios.Audios[_drawZone].InnerRadius3D, _audios.Audios[_drawZone].OutherRadius3D);
         }
 
 
@@ -74,26 +74,26 @@ namespace LazyBot.Visualizer
         private void DrawZone(float innerRadius, float outherRadius)
         {
 #if UNITY_EDITOR
-            if (m_vizualize)
+            if (_vizualize)
             {
                 float progress;
-                float stepLength = (outherRadius - innerRadius) / m_step;
+                float stepLength = (outherRadius - innerRadius) / _step;
 
                 for (float i = outherRadius; i >= innerRadius; i -= stepLength)
                 {
                     progress = 1 - LazyBot.Utility.Data.FloatHelper.Map(i, innerRadius, outherRadius, 0, 1);
 
                     UnityEditor.Handles.color = new Color(
-                        Mathf.Lerp(m_colorNoiseBad.r, m_colorNoiseGood.r, progress),
-                        Mathf.Lerp(m_colorNoiseBad.g, m_colorNoiseGood.g, progress),
-                        Mathf.Lerp(m_colorNoiseBad.b, m_colorNoiseGood.b, progress), m_alpha);
+                        Mathf.Lerp(_colorNoiseBad.r, _colorNoiseGood.r, progress),
+                        Mathf.Lerp(_colorNoiseBad.g, _colorNoiseGood.g, progress),
+                        Mathf.Lerp(_colorNoiseBad.b, _colorNoiseGood.b, progress), _alpha);
 
                     UnityEditor.Handles.DrawSolidArc(transform.position, transform.up, -transform.right, 360, i);
                 }
             }
             else
             {
-                UnityEditor.Handles.color = m_colorZone;
+                UnityEditor.Handles.color = _colorZone;
 
                 UnityEditor.Handles.DrawWireArc(transform.position,
                     Vector3.up, Vector3.forward, 360, innerRadius);

@@ -8,7 +8,7 @@ namespace LazyBot.Manager
 {
     public class EntityManager : MonoBehaviour
     {
-        [SerializeField] private FloatReference m_updateRate;
+        [SerializeField] private FloatReference _updateRate;
         [SerializeField] private TargetPropertySO[] _properties;        
 
         private static EntityManager _entityManager;
@@ -73,7 +73,7 @@ namespace LazyBot.Manager
         {
             if (isActive)
             {
-                _entityChecker = StartCoroutine("CheckEntities", m_updateRate.Value);
+                _entityChecker = StartCoroutine("CheckEntities", _updateRate.Value);
             }
             else if ((!isActive) && (_entityChecker != null))
             {

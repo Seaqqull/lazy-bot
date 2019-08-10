@@ -27,122 +27,122 @@ namespace LazyBot.Area.Data
         /// <summary>
         /// Socket designating standard position. By default gameObject.
         /// </summary>
-        [SerializeField] private Transform m_socket;
+        [SerializeField] private Transform _socket;
         /// <summary>
         /// Offset position relative to socket.
         /// </summary>
-        [SerializeField] private Vector3 m_offset;
+        [SerializeField] private Vector3 _offset;
         /// <summary>
         /// Rotation relative to socket.
         /// </summary>
-        [SerializeField] private Vector3 m_rotation;
+        [SerializeField] private Vector3 _rotation;
 
         /// <summary>
         /// Radius of detection.
         /// </summary>
-        [SerializeField] [Range(0, 500)] private float m_radius;
+        [SerializeField] [Range(0, 500)] private float _radius;
         /// <summary>
         /// Field of view detection.
         /// </summary>
-        [SerializeField] [Range(0, 360)] private float m_angle;
+        [SerializeField] [Range(0, 360)] private float _angle;
         
         /// <summary>
         /// Layer that represents obstacles, which can prevent detection of targets.
         /// </summary>
-        [SerializeField] private LayerMask m_obstacleMask;
+        [SerializeField] private LayerMask _obstacleMask;
         /// <summary>
         /// Layer that represents targets.
         /// </summary>
-        [SerializeField] private LayerMask m_targetMask;
+        [SerializeField] private LayerMask _targetMask;
         /// <summary>
         /// Tags, which used to search targets.
         /// </summary>
-        [SerializeField] [TagSelector] private string[] m_enemyTags;
+        [SerializeField] [TagSelector] private string[] _enemyTags;
         
         public LayerMask ObstacleMask
         {
             get
             {
-                return this.m_obstacleMask;
+                return this._obstacleMask;
             }
 
             set
             {
-                this.m_obstacleMask = value;
+                this._obstacleMask = value;
             }
         }
         public LayerMask TargetMask
         {
             get
             {
-                return this.m_targetMask;
+                return this._targetMask;
             }
 
             set
             {
-                this.m_targetMask = value;
+                this._targetMask = value;
             }
         }
         public string[] EnemyTags
         {
             get
             {
-                return this.m_enemyTags;
+                return this._enemyTags;
             }
             set
             {
-                this.m_enemyTags = value;
+                this._enemyTags = value;
             }
         }
         public Transform Socket
         {
-            get { return this.m_socket; }
-            set { this.m_socket = value; }
+            get { return this._socket; }
+            set { this._socket = value; }
         }
         public Vector3 Rotation
         {
             get
             {
-                return this.m_rotation;
+                return this._rotation;
             }
             set
             {
-                this.m_rotation = value;
+                this._rotation = value;
             }
         }
         public Vector3 Offset
         {
             set
             {
-                this.m_offset = value;
+                this._offset = value;
             }
             get
             {
-                return this.m_offset;
+                return this._offset;
             }
         }
         public float Radius
         {
             get
             {
-                return this.m_radius;
+                return this._radius;
             }
 
             set
             {
-                this.m_radius = value;
+                this._radius = value;
             }
         }
         public float Angle
         {
             get
             {
-                return this.m_angle;
+                return this._angle;
             }
 
             set
             {
-                this.m_angle = value;
+                this._angle = value;
             }
         }
 

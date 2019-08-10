@@ -9,22 +9,22 @@ namespace LazyBot.Target.Property
     [CreateAssetMenu(menuName = "Target/Type")]
     public class TargetTypeSO : ScriptableObject, IEquatable<TargetTypeSO>
     {
-        [SerializeField] private string m_name;
-        [SerializeField] private LazyBot.Entity.Data.IntMask m_mask;
+        [SerializeField] private string _name;
+        [SerializeField] private LazyBot.Entity.Data.IntMask _mask;
 
-        [SerializeField] private bool m_dataOnDetection;
+        [SerializeField] private bool _dataOnDetection;
 
         public LazyBot.Entity.Data.IntMask Mask
         {
-            get { return this.m_mask; }
+            get { return this._mask; }
         }
         public bool DataOnDetection
         {
-            get { return this.m_dataOnDetection; }
+            get { return this._dataOnDetection; }
         }        
         public string Name
         {
-            get { return this.m_name; }
+            get { return this._name; }
         }
 
 
@@ -35,7 +35,7 @@ namespace LazyBot.Target.Property
 
         public bool Equals(TargetTypeSO obj)
         {
-            return (this.m_name == obj.m_name);
+            return (this._name == obj._name);
         }
 
         public override bool Equals(System.Object obj)

@@ -11,29 +11,29 @@ namespace LazyBot.Navigation
         /// <summary>
         /// Socket of target, that used to calculate movement and animation speed.
         /// </summary>
-        [SerializeField] protected Transform m_ownerTransform;
+        [SerializeField] protected Transform _ownerTransform;
 
-        [SerializeField] protected List<LazyBot.Navigation.Data.NavigationPoint> m_points;
+        [SerializeField] protected List<LazyBot.Navigation.Data.NavigationPoint> _points;
 
         /// <summary>
         /// Is next destination point random.
         /// </summary>
-        [SerializeField] protected bool m_isRandom = false;
-        [SerializeField] protected int m_startupPoint = 0;
+        [SerializeField] protected bool _isRandom = false;
+        [SerializeField] protected int _startupPoint = 0;
         
-        [SerializeField] protected Color m_impactColor = Color.yellow;
-        [SerializeField] protected Color m_accuracyColor = Color.red;
-        [SerializeField] protected Color m_lineColor = Color.green;
+        [SerializeField] protected Color _impactColor = Color.yellow;
+        [SerializeField] protected Color _accuracyColor = Color.red;
+        [SerializeField] protected Color _lineColor = Color.green;
 
 
         public List<LazyBot.Navigation.Data.NavigationPoint> Points
         {
             get
             {
-                return this.m_points ??
-                    (this.m_points = new List<LazyBot.Navigation.Data.NavigationPoint>());
+                return this._points ??
+                    (this._points = new List<LazyBot.Navigation.Data.NavigationPoint>());
             }
-            //set { this.m_points = value; }
+            //set { this._points = value; }
         }
         /// <summary>
         /// Destination navigation point.
@@ -44,7 +44,7 @@ namespace LazyBot.Navigation
             {
                 if (Points.Count == 0)
                     throw new System.Exception("Can't get destination point, navigation is empty.");
-                return Points[m_previousPoint];
+                return Points[_previousPoint];
             }
         }
         /// <summary>
@@ -56,7 +56,7 @@ namespace LazyBot.Navigation
             {
                 if (Points.Count == 0)
                     throw new System.Exception("Can't get destination position, navigation is empty.");
-                return Points[m_previousPoint].Transform.position;
+                return Points[_previousPoint].Transform.position;
             }
         }
         /// <summary>
@@ -64,8 +64,8 @@ namespace LazyBot.Navigation
         /// </summary>
         public bool IsRandom
         {
-            get { return this.m_isRandom; }
-            set { this.m_isRandom = value; }
+            get { return this._isRandom; }
+            set { this._isRandom = value; }
         }
         public int Length
         {
@@ -75,19 +75,19 @@ namespace LazyBot.Navigation
         /// <summary>        
         /// Current destination point.
         /// </summary>
-        protected int m_previousPoint = -1;
+        protected int _previousPoint = -1;
         /// <summary>
         /// Next point, that will be setted as destination, 
         /// after reaching current destination point + time delay.
         /// </summary>
-        protected int m_destinationPoint;
+        protected int _destinationPoint;
 
 
         protected virtual void Awake()
         {
-            if (m_ownerTransform == null)
-                m_ownerTransform = GetComponent<Transform>();
-            m_destinationPoint = m_startupPoint;
+            if (_ownerTransform == null)
+                _ownerTransform = GetComponent<Transform>();
+            _destinationPoint = _startupPoint;
         }
 
         protected virtual void OnDrawGizmosSelected()
@@ -95,7 +95,7 @@ namespace LazyBot.Navigation
 #if UNITY_EDITOR
             if (Points.Count == 0) return;
 
-            Gizmos.color = m_lineColor;
+            Gizmos.color = _lineColor;
 
             int i;
             for (i = 0; i < Points.Count - 1; i++)
@@ -106,11 +106,11 @@ namespace LazyBot.Navigation
                     Gizmos.DrawLine(Points[i].Transform.position,
                         Points[i + 1].Transform.position);
 
-                    UnityEditor.Handles.color = m_impactColor;
+                    UnityEditor.Handles.color = _impactColor;
                     UnityEditor.Handles.DrawWireArc(Points[i].Transform.position,
                         Vector3.up, Vector3.forward, 360, Points[i].ImpactRadius);
 
-                    UnityEditor.Handles.color = m_accuracyColor;
+                    UnityEditor.Handles.color = _accuracyColor;
                     UnityEditor.Handles.DrawWireArc(Points[i].Transform.position,
                         Vector3.up, Vector3.forward, 360, Points[i].AccuracyRadius);
                 }
@@ -121,10 +121,10 @@ namespace LazyBot.Navigation
             if ((Points.Count == 1) || (!Points[i].Point))
                 throw new System.Exception(string.Format("Point reference {0} does not exist.", i));
 
-            UnityEditor.Handles.color = m_impactColor;
+            UnityEditor.Handles.color = _impactColor;
             UnityEditor.Handles.DrawWireArc(Points[i].Transform.position,
                 Vector3.up, Vector3.forward, 360, Points[i].ImpactRadius);
-            UnityEditor.Handles.color = m_accuracyColor;
+            UnityEditor.Handles.color = _accuracyColor;
             UnityEditor.Handles.DrawWireArc(Points[i].Transform.position,
                 Vector3.up, Vector3.forward, 360, Points[i].AccuracyRadius);
 #endif
@@ -144,8 +144,8 @@ namespace LazyBot.Navigation
         /// </summary>
         public void ResetToZero()
         {
-            m_destinationPoint = 0;
-            m_previousPoint = -1;
+            _destinationPoint = 0;
+            _previousPoint = -1;
         }
 
         /// <summary>
@@ -229,7 +229,7 @@ namespace LazyBot.Navigation
 
             for (int i = 0; i < Points.Count; i++)
             {
-                distanceTemp = Vector3.Distance(m_ownerTransform.position,
+                distanceTemp = Vector3.Distance(_ownerTransform.position,
                     Points[i].Transform.position);
                 if (distanceTemp < distanceMin)
                 {
@@ -238,8 +238,8 @@ namespace LazyBot.Navigation
                 }
             }
 
-            m_previousPoint = destination;
-            m_destinationPoint = (m_previousPoint + 1) % Points.Count;
+            _previousPoint = destination;
+            _destinationPoint = (_previousPoint + 1) % Points.Count;
 
             return Points[destination].Transform.position;
         }
@@ -269,8 +269,8 @@ namespace LazyBot.Navigation
                 }
             }
 
-            m_previousPoint = destination;
-            m_destinationPoint = (m_previousPoint + 1) % Points.Count;
+            _previousPoint = destination;
+            _destinationPoint = (_previousPoint + 1) % Points.Count;
 
             return Points[destination].Transform.position;
         }
@@ -285,11 +285,11 @@ namespace LazyBot.Navigation
             if (Points.Count == 0)
                 throw new System.Exception("Can't get next point, navigation is empty.");
 
-            Vector3 destination = Points[m_destinationPoint].Transform.position;
-            destinationIndex = m_destinationPoint;
+            Vector3 destination = Points[_destinationPoint].Transform.position;
+            destinationIndex = _destinationPoint;
 
-            m_previousPoint = m_destinationPoint;
-            m_destinationPoint = (m_destinationPoint + 1) % Points.Count;
+            _previousPoint = _destinationPoint;
+            _destinationPoint = (_destinationPoint + 1) % Points.Count;
 
             return destination;
         }
@@ -310,15 +310,15 @@ namespace LazyBot.Navigation
             {                
                 randomPoint = Random.Range(0, Points.Count);
             }
-            while ((randomPoint == m_previousPoint) ||
-                   (randomPoint == m_destinationPoint));
+            while ((randomPoint == _previousPoint) ||
+                   (randomPoint == _destinationPoint));
 
 
-            Vector3 destination = Points[m_destinationPoint].Transform.position;
-            destinationIndex = m_destinationPoint;
-            //m_prePreviousPoint = m_previousPoint;
-            m_previousPoint = m_destinationPoint;
-            m_destinationPoint = randomPoint;
+            Vector3 destination = Points[_destinationPoint].Transform.position;
+            destinationIndex = _destinationPoint;
+            //_prePreviousPoint = _previousPoint;
+            _previousPoint = _destinationPoint;
+            _destinationPoint = randomPoint;
 
             return destination;
         }
@@ -364,7 +364,7 @@ namespace LazyBot.Navigation
         {
             for (int i = 0; i < Points.Count; i++)
             {
-                CalculateSpeedOnPoint(ref speed, m_ownerTransform.position, i);
+                CalculateSpeedOnPoint(ref speed, _ownerTransform.position, i);
             }
         }
 
@@ -375,7 +375,7 @@ namespace LazyBot.Navigation
         /// <param name="index">Index of navigation point.</param>
         public void CalculateSpeedOnPoint(ref float speed, int index)
         {
-            float distance = Vector3.Distance(m_ownerTransform.position, Points[index].Transform.position);
+            float distance = Vector3.Distance(_ownerTransform.position, Points[index].Transform.position);
 
             if (distance <= Points[index].ImpactRadius)
             {

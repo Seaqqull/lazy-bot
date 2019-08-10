@@ -15,143 +15,143 @@ namespace LazyBot.Entity
         /// <summary>
         /// Index of active state.
         /// </summary>
-        [SerializeField] [Range(0, ushort.MaxValue)] protected int m_activeState;
+        [SerializeField] [Range(0, ushort.MaxValue)] protected int _activeState;
         /// <summary>
         /// Period of destination path update.
         /// </summary>
-        [SerializeField] [Range(0, ushort.MaxValue)] protected float m_pathUpdateDelay;
-        [SerializeField] protected LazyBot.Entity.Data.EntityState[] m_statesSteady;
-        [SerializeField] protected LazyBot.Entity.Data.EntityState[] m_states;
+        [SerializeField] [Range(0, ushort.MaxValue)] protected float _pathUpdateDelay;
+        [SerializeField] protected LazyBot.Entity.Data.EntityState[] _statesSteady;
+        [SerializeField] protected LazyBot.Entity.Data.EntityState[] _states;
 
-        protected LazyBot.Area.Detection.DetectionAreaContainer m_detectionAreas;
-        protected LazyBot.Navigation.NavigationContainer m_navigationPath;
-        protected LazyBot.Target.Data.TargetInfo m_targets;
+        protected LazyBot.Area.Detection.DetectionAreaContainer _detectionAreas;
+        protected LazyBot.Navigation.NavigationContainer _navigationPath;
+        protected LazyBot.Target.Data.TargetInfo _targets;
 
-        protected LazyBot.Audio.AudioContainer m_audioContainer;
-        protected EntityBehaviour m_behaviour;
+        protected LazyBot.Audio.AudioContainer _audioContainer;
+        protected EntityBehaviour _behaviour;
 
-        protected Coroutine m_sleepCoroutation;
-        protected float m_timeSincePathUpdate;
-        protected Transform m_transform;
-        protected int m_navigationIndex;
+        protected Coroutine _sleepCoroutation;
+        protected float _timeSincePathUpdate;
+        protected Transform _transform;
+        protected int _navigationIndex;
 
-        protected BitArray m_steadyActivation;
-        protected Point[] m_stateSteadyOrder; // X - state index, Y - state priority
-        protected Point[] m_stateOrder; // X - state index, Y - state priority
+        protected BitArray _steadyActivation;
+        protected Point[] _stateSteadyOrder; // X - state index, Y - state priority
+        protected Point[] _stateOrder; // X - state index, Y - state priority
 
-        protected bool m_isSleep;
-        protected bool m_isBlock; // Used in two cases: isBlock on sleep \ isBlock on state(sleep deactivated)
+        protected bool _isSleep;
+        protected bool _isBlock; // Used in two cases: isBlock on sleep \ isBlock on state(sleep deactivated)
 
         public LazyBot.Area.Detection.DetectionAreaContainer DetectionAreas
         {
             get
             {
-                return m_detectionAreas;
+                return _detectionAreas;
             }
         }
         public LazyBot.Navigation.NavigationContainer NavigationPath
         {
-            get { return this.m_navigationPath; }
+            get { return this._navigationPath; }
         }
         public LazyBot.Entity.EntityBehaviour Behaviour
         {
-            get { return this.m_behaviour; }
+            get { return this._behaviour; }
         }
         public LazyBot.Target.Data.TargetInfo Targets
         {
-            get { return this.m_targets; }
+            get { return this._targets; }
         }
         public int NavigationIndex
         {
-            get { return this.m_navigationIndex; }
-            set { this.m_navigationIndex = value; }
+            get { return this._navigationIndex; }
+            set { this._navigationIndex = value; }
         }
         public Transform Transform
         {
-            get { return this.m_transform; }
+            get { return this._transform; }
         }
         public bool IsBlocked
         {
-            get { return this.m_isBlock; }
-            set { this.m_isBlock = value; }
+            get { return this._isBlock; }
+            set { this._isBlock = value; }
         }
         public bool IsSleep
         {
-            get { return this.m_isSleep; }
+            get { return this._isSleep; }
         }
         
 
         protected virtual void Awake()
         {
-            m_detectionAreas = GetComponent<LazyBot.Area.Detection.DetectionAreaContainer>();
-            m_navigationPath = GetComponent<LazyBot.Navigation.NavigationContainer>();
-            m_targets = new LazyBot.Target.Data.TargetInfo();
+            _detectionAreas = GetComponent<LazyBot.Area.Detection.DetectionAreaContainer>();
+            _navigationPath = GetComponent<LazyBot.Navigation.NavigationContainer>();
+            _targets = new LazyBot.Target.Data.TargetInfo();
 
-            m_audioContainer = GetComponent<LazyBot.Audio.AudioContainer>();
-            m_behaviour = GetComponent<EntityBehaviour>();            
+            _audioContainer = GetComponent<LazyBot.Audio.AudioContainer>();
+            _behaviour = GetComponent<EntityBehaviour>();            
 
-            m_transform = gameObject.transform;
+            _transform = gameObject.transform;
         }
 
         protected virtual void Start()
         {
-            UpdateStates(m_statesSteady, out m_stateSteadyOrder);
-            UpdateStates(m_states, out m_stateOrder);
+            UpdateStates(_statesSteady, out _stateSteadyOrder);
+            UpdateStates(_states, out _stateOrder);
 
             OnStateChange();
 
-            DoStateAction(m_states, m_activeState, Data.StateAction.OnEnter);
+            DoStateAction(_states, _activeState, Data.StateAction.OnEnter);
 
             ActivateSteadyState();
         }
 
         protected virtual void Update()
         {
-            if (m_behaviour.IsDeath) return;
+            if (_behaviour.IsDeath) return;
 
-            m_timeSincePathUpdate += Time.deltaTime;
+            _timeSincePathUpdate += Time.deltaTime;
 
             int i;
             Data.EntityState state;
 
-            for (i = 0; i < m_stateSteadyOrder.Length; i++)
+            for (i = 0; i < _stateSteadyOrder.Length; i++)
             {
-                state = m_statesSteady[m_stateSteadyOrder[i].X];
+                state = _statesSteady[_stateSteadyOrder[i].X];
 
                 if (state.State.Validate(this))
                 {
-                    if (!m_steadyActivation[m_stateSteadyOrder[i].X])
+                    if (!_steadyActivation[_stateSteadyOrder[i].X])
                     {
-                        m_steadyActivation[m_stateSteadyOrder[i].X] = true;
+                        _steadyActivation[_stateSteadyOrder[i].X] = true;
                         state.State.OnStateEnter(this);
                     }
                     state.State.Excute(this);
                 }
-                else if (m_steadyActivation[m_stateSteadyOrder[i].X])
+                else if (_steadyActivation[_stateSteadyOrder[i].X])
                 {                   
-                    m_steadyActivation[m_stateSteadyOrder[i].X] = false;
+                    _steadyActivation[_stateSteadyOrder[i].X] = false;
                     state.State.OnStateExit(this);                 
                 }
             }
 
-            for (i = 0; i < m_stateOrder.Length && !m_isBlock; i++)
+            for (i = 0; i < _stateOrder.Length && !_isBlock; i++)
             {
-                state = m_states[m_stateOrder[i].X];
+                state = _states[_stateOrder[i].X];
 
-                if ((m_stateOrder[i].X == m_activeState) ||
-                    (!(state.CheckOn & m_states[m_activeState].Id)) ||
+                if ((_stateOrder[i].X == _activeState) ||
+                    (!(state.CheckOn & _states[_activeState].Id)) ||
                     (!(state.State.Validate(this)))) continue;
 
                 state.State.OnStateExit(this);
 
-                m_activeState = m_stateOrder[i].X;
+                _activeState = _stateOrder[i].X;
                 OnStateChange();
 
                 state.State.OnStateEnter(this);                
                 break;
             }
 
-            DoStateAction(m_states, m_activeState, Data.StateAction.Execute);
+            DoStateAction(_states, _activeState, Data.StateAction.Execute);
         }
         
 
@@ -160,27 +160,27 @@ namespace LazyBot.Entity
         /// </summary>
         protected void ResetSleep()
         {
-            m_isSleep = false;
-            if (m_sleepCoroutation != null)
+            _isSleep = false;
+            if (_sleepCoroutation != null)
             {
-                StopCoroutine(m_sleepCoroutation);
-                m_sleepCoroutation = null;
+                StopCoroutine(_sleepCoroutation);
+                _sleepCoroutation = null;
             }
         }
 
         protected void ActivateSteadyState()
         {
             Data.EntityState state;
-            m_steadyActivation = new BitArray(m_stateSteadyOrder.Length);            
+            _steadyActivation = new BitArray(_stateSteadyOrder.Length);            
 
-            for (int i = 0; i < m_stateSteadyOrder.Length; i++)
+            for (int i = 0; i < _stateSteadyOrder.Length; i++)
             {
-                state = m_statesSteady[m_stateSteadyOrder[i].X];
+                state = _statesSteady[_stateSteadyOrder[i].X];
 
                 if (!state.State.Validate(this))
                     continue;
 
-                m_steadyActivation[i] = true;
+                _steadyActivation[i] = true;
 
                 state.State.OnStateEnter(this);
                 state.State.Excute(this);
@@ -189,8 +189,8 @@ namespace LazyBot.Entity
 
         protected void AddTargetType(Target.Property.TargetTypeSO newType)
         {
-            if (!m_targets.Data.ContainsKey(newType))
-                m_targets.AddType(newType);
+            if (!_targets.Data.ContainsKey(newType))
+                _targets.AddType(newType);
         }
 
         /// <summary>
@@ -250,17 +250,17 @@ namespace LazyBot.Entity
 
         protected virtual void OnStateChange()
         {
-            if (m_states.Length == 0) return;
+            if (_states.Length == 0) return;
 
             ResetSleep();
-            m_isBlock = m_states[m_activeState].IsBlocking;
+            _isBlock = _states[_activeState].IsBlocking;
         }
 
 
         public virtual void Death()
         {
-            //if (!m_animation.IsDead)
-            //    m_animation.Dead();
+            //if (!_animation.IsDead)
+            //    _animation.Dead();
             //return;
             Destroy(gameObject);
         }
@@ -268,12 +268,12 @@ namespace LazyBot.Entity
         public virtual void WakeUp()
         {
             ResetSleep();
-            m_isBlock = m_states[m_activeState].IsBlocking;
+            _isBlock = _states[_activeState].IsBlocking;
         }
 
         public virtual void Damage(float damage)
         {
-            m_behaviour.Damage(damage);
+            _behaviour.Damage(damage);
         }
 
         /// <summary>
@@ -287,16 +287,16 @@ namespace LazyBot.Entity
         {
             ResetSleep();
 
-            m_isSleep = true;
-            m_isBlock = m_states[m_activeState].IsBlockingOnSleep;
+            _isSleep = true;
+            _isBlock = _states[_activeState].IsBlockingOnSleep;
 
             if (time < 0.0f) return;
 
-            m_sleepCoroutation = RunLaterValued(
+            _sleepCoroutation = RunLaterValued(
                 ()=> 
                 {
-                    this.m_isSleep = false;
-                    this.m_isBlock = m_states[m_activeState].IsBlocking;
+                    this._isSleep = false;
+                    this._isBlock = _states[_activeState].IsBlocking;
                 },
                 time
             );
@@ -316,18 +316,18 @@ namespace LazyBot.Entity
 
             if (time < 0.0f)
             {
-                m_isBlock = false;
+                _isBlock = false;
                 return;
             }
 
-            m_isSleep = true;
-            m_isBlock = true;
+            _isSleep = true;
+            _isBlock = true;
 
-            m_sleepCoroutation = RunLaterValued(
+            _sleepCoroutation = RunLaterValued(
                 () =>
                 {
-                    this.m_isSleep = false;
-                    this.m_isBlock = false;
+                    this._isSleep = false;
+                    this._isBlock = false;
                 },
                 time
             );
@@ -362,7 +362,7 @@ namespace LazyBot.Entity
         public void OnUpdatePathDestination()
         {
             UpdatePath(
-                m_navigationPath.GetNearestPoint(ref m_navigationIndex),
+                _navigationPath.GetNearestPoint(ref _navigationIndex),
                 true
             );
         }
@@ -370,7 +370,7 @@ namespace LazyBot.Entity
         public void OnUpdatePathDestinationNext()
         {
             UpdatePath(
-                m_navigationPath.GetDestination(ref m_navigationIndex),
+                _navigationPath.GetDestination(ref _navigationIndex),
                 true
             );
         }
@@ -381,7 +381,7 @@ namespace LazyBot.Entity
 
             Target.Data.TargetInfo.TargetContainer targetContainer;
 
-            if (m_targets.Data.TryGetValue(area.TargetType, out targetContainer))
+            if (_targets.Data.TryGetValue(area.TargetType, out targetContainer))
                 targetContainer.Erase(area.Id);
         }
 
@@ -391,7 +391,7 @@ namespace LazyBot.Entity
 
             AddTargetType(area.TargetType);
 
-            m_targets[area.TargetType].AddArea(area.Id);
+            _targets[area.TargetType].AddArea(area.Id);
         }
 
         public void AddTarget(LazyBot.Area.Searching.SearchingArea area, LazyBot.Area.Detection.DetectionArea detectionArea)
@@ -401,7 +401,7 @@ namespace LazyBot.Entity
             AddTargetType(area.TargetType);
 
             if (area.TargetType.DataOnDetection)// Fill data
-                m_targets[area.TargetType].AddTarget(area.Id, 
+                _targets[area.TargetType].AddTarget(area.Id, 
                     LazyBot.Manager.EntityManager.Instance.GetProperties(detectionArea.OwnerId, area.TargetType.Mask));
             //else data will be filled on state execution
         }

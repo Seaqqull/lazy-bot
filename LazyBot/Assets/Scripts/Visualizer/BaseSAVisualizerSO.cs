@@ -4,13 +4,13 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Visualizer/Base Circle Area")]
 public class BaseSAVisualizerSO : SearchingAreaVisualizerSO
 {
-    [SerializeField] private Color m_lineColor = Color.white;
+    [SerializeField] private Color _lineColor = Color.white;
 
 
     public override void Visuzlize(SearchingArea searchingArea)
     {
         Vector3 positionWithOffset = searchingArea.Socket.position + searchingArea.Data.Offset;
-        UnityEditor.Handles.color = m_lineColor;
+        UnityEditor.Handles.color = _lineColor;
 
         UnityEditor.Handles.DrawWireArc(positionWithOffset,
             Vector3.up, Vector3.forward, 360.0f, searchingArea.Data.Radius);

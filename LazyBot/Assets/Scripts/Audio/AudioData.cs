@@ -17,15 +17,15 @@ namespace LazyBot.Audio.Data
         [System.Serializable]
         public class AudioDetection
         {
-            [SerializeField] [Range(0.0f, ushort.MaxValue)] public float m_loudness = 100.0f;
+            [SerializeField] [Range(0.0f, ushort.MaxValue)] public float _loudness = 100.0f;
 
-            [SerializeField] [Range(0.0f, ushort.MaxValue)] public float m_maxDistance = 10.0f;
-            [SerializeField] [Range(0.0f, ushort.MaxValue)] public float m_minDistance;
+            [SerializeField] [Range(0.0f, ushort.MaxValue)] public float _maxDistance = 10.0f;
+            [SerializeField] [Range(0.0f, ushort.MaxValue)] public float _minDistance;
 
-            [SerializeField] public bool m_cutOnMin = false;
-            [SerializeField] public bool m_cutOnMax = true;
+            [SerializeField] public bool _cutOnMin = false;
+            [SerializeField] public bool _cutOnMax = true;
 
-            [SerializeField] public AnimationCurve m_loudnessSpread = AnimationCurve.Linear(0, 1, 1, 0);
+            [SerializeField] public AnimationCurve _loudnessSpread = AnimationCurve.Linear(0, 1, 1, 0);
         }
 
         /// <summary>
@@ -34,53 +34,53 @@ namespace LazyBot.Audio.Data
         [System.Serializable]
         public class Audio3D
         {
-            [SerializeField] [Range(0.0f, ushort.MaxValue)] public float m_maxDistance = 10.0f;
-            [SerializeField] [Range(0.0f, ushort.MaxValue)] public float m_minDistance;
+            [SerializeField] [Range(0.0f, ushort.MaxValue)] public float _maxDistance = 10.0f;
+            [SerializeField] [Range(0.0f, ushort.MaxValue)] public float _minDistance;
 
             /// <summary>
             /// Set how audible the Doppler effect is. Use 0 to disable it. 
             /// Use 1 make it audible for fast moving objects.
             /// </summary>
-            [SerializeField] [Range(0.0f, 5.0f)] public float m_dopplerLevel = 1.0f;
-            [SerializeField] [Range(0.0f, 360.0f)] public float m_spread = 360.0f;
+            [SerializeField] [Range(0.0f, 5.0f)] public float _dopplerLevel = 1.0f;
+            [SerializeField] [Range(0.0f, 360.0f)] public float _spread = 360.0f;
 
-            [SerializeField] public AnimationCurve m_volumeSpread = AnimationCurve.Linear(0, 1, 1, 0);
+            [SerializeField] public AnimationCurve _volumeSpread = AnimationCurve.Linear(0, 1, 1, 0);
         }
 
 
-        [SerializeField] private string m_name;
+        [SerializeField] private string _name;
 
-        [SerializeField] private AudioMixerGroup m_output;
-        [SerializeField] private AudioClip m_audioClip;
+        [SerializeField] private AudioMixerGroup _output;
+        [SerializeField] private AudioClip _audioClip;
 
-        [SerializeField] private bool m_loop;
-        [SerializeField] private bool m_mute;
+        [SerializeField] private bool _loop;
+        [SerializeField] private bool _mute;
 
-        [SerializeField] [Range(0.0f, ushort.MaxValue)] private float m_playDelay;
+        [SerializeField] [Range(0.0f, ushort.MaxValue)] private float _playDelay;
         /// <summary>
         /// Determines the reverb effect that will be used by the reverb zone.
         /// </summary>
-        [SerializeField] [Range(0.0f, 1.1f)] private float m_reverbZoneMix = 1.0f;
-        [SerializeField] [Range(0.0f, ushort.MaxValue)] private float m_playTime;
+        [SerializeField] [Range(0.0f, 1.1f)] private float _reverbZoneMix = 1.0f;
+        [SerializeField] [Range(0.0f, ushort.MaxValue)] private float _playTime;
         /// <summary>
         /// Pitch is a quality that makes a melody go higher or lower.
         /// </summary>
-        [SerializeField] [Range(-3.0f, 3.0f)] private float m_pitch = 1.0f;
-        [SerializeField] [Range(0.0f, 1.0f)] private float m_volume = 1.0f;
+        [SerializeField] [Range(-3.0f, 3.0f)] private float _pitch = 1.0f;
+        [SerializeField] [Range(0.0f, 1.0f)] private float _volume = 1.0f;
         /// <summary>
         /// Sets how much this AudioSource is affected by 3D spatialisation calculations (attenuation, doppler etc).
         /// 0.0 makes the sound full 2D, 1.0 makes it full 3D.
         /// </summary>
-        [SerializeField] [Range(0.0f, 1.0f)] private float m_spatialBlend;
+        [SerializeField] [Range(0.0f, 1.0f)] private float _spatialBlend;
 
-        [SerializeField] AudioDetection m_settingDetection;
-        [SerializeField] Audio3D m_setting3D;
+        [SerializeField] AudioDetection _settingDetection;
+        [SerializeField] Audio3D _setting3D;
 
 
         /// <summary>
         /// Attached to gameObject audioSource.
         /// </summary>
-        private Dictionary<string, AudioSourceEngine> m_records;
+        private Dictionary<string, AudioSourceEngine> _records;
 
 
         /// <summary>
@@ -90,53 +90,53 @@ namespace LazyBot.Audio.Data
         {
             get
             {
-                return (this.m_records) ??
-                    (this.m_records = new Dictionary<string, AudioSourceEngine>());
+                return (this._records) ??
+                    (this._records = new Dictionary<string, AudioSourceEngine>());
             }
         }
         public float OutherRadiusDetection
         {
-            get { return this.m_settingDetection.m_maxDistance; }
+            get { return this._settingDetection._maxDistance; }
         }
         public AnimationCurve VolumeSpread
         {
-            get { return this.m_setting3D.m_volumeSpread; }
+            get { return this._setting3D._volumeSpread; }
         }
         public float InnerRadiusDetection
         {
-            get { return this.m_settingDetection.m_minDistance; }
+            get { return this._settingDetection._minDistance; }
         }
         public float OutherRadius3D
         {
-            get { return this.m_setting3D.m_maxDistance; }
+            get { return this._setting3D._maxDistance; }
         }
         public float InnerRadius3D
         {
-            get { return this.m_setting3D.m_minDistance; }
+            get { return this._setting3D._minDistance; }
         }
         public float AudioLength
         {
-            get { return (this.m_audioClip) ? this.m_audioClip.length : 0.0f; }
+            get { return (this._audioClip) ? this._audioClip.length : 0.0f; }
         }
         public float PlayDelay
         {
-            get { return this.m_playDelay; }
-            set { this.m_playDelay = value; }
+            get { return this._playDelay; }
+            set { this._playDelay = value; }
         }
         public float PlayTime
         {
-            get { return this.m_playTime; }
-            set { this.m_playTime = value; }
+            get { return this._playTime; }
+            set { this._playTime = value; }
         }
         public string Name
         {
-            get { return this.m_name; }
-            set { this.m_name = value; }
+            get { return this._name; }
+            set { this._name = value; }
         }
         public bool Loop
         {
-            get { return this.m_loop; }
-            set { this.m_loop = value; }
+            get { return this._loop; }
+            set { this._loop = value; }
         }
 
 
@@ -152,10 +152,10 @@ namespace LazyBot.Audio.Data
             if (!Records.TryGetValue(audioKey, out audioSource))
                 return false;
 
-            if (m_playDelay == 0.0f)
+            if (_playDelay == 0.0f)
                 audioSource.Play();
             else
-                audioSource.PlayDelayed(m_playDelay);
+                audioSource.PlayDelayed(_playDelay);
 
             return true;
         }
@@ -232,28 +232,28 @@ namespace LazyBot.Audio.Data
         /// <returns>Key of initialized audio source.</returns>
         public string InitializeAudioSource(GameObject gameObject)
         {
-            if ((!m_output) ||
-                (!m_audioClip)) return string.Empty;
+            if ((!_output) ||
+                (!_audioClip)) return string.Empty;
 
             string sourceKey = LazyBot.Utility.Data.Hasher.GenerateHash();
             AudioSourceEngine audioSource = gameObject.AddComponent<UnityEngine.AudioSource>();
 
-            audioSource.clip = m_audioClip;
-            audioSource.outputAudioMixerGroup = m_output;
-            audioSource.mute = m_mute;
+            audioSource.clip = _audioClip;
+            audioSource.outputAudioMixerGroup = _output;
+            audioSource.mute = _mute;
             audioSource.playOnAwake = false;
-            audioSource.loop = m_loop;
-            audioSource.volume = m_volume;
-            audioSource.pitch = m_pitch;
-            audioSource.spatialBlend = m_spatialBlend;
-            audioSource.reverbZoneMix = m_reverbZoneMix;
+            audioSource.loop = _loop;
+            audioSource.volume = _volume;
+            audioSource.pitch = _pitch;
+            audioSource.spatialBlend = _spatialBlend;
+            audioSource.reverbZoneMix = _reverbZoneMix;
 
-            audioSource.dopplerLevel = m_setting3D.m_dopplerLevel;
-            audioSource.spread = m_setting3D.m_spread;
-            audioSource.minDistance = m_setting3D.m_minDistance;
-            audioSource.maxDistance = m_setting3D.m_maxDistance;
+            audioSource.dopplerLevel = _setting3D._dopplerLevel;
+            audioSource.spread = _setting3D._spread;
+            audioSource.minDistance = _setting3D._minDistance;
+            audioSource.maxDistance = _setting3D._maxDistance;
 
-            audioSource.SetCustomCurve(AudioSourceCurveType.CustomRolloff, m_setting3D.m_volumeSpread);
+            audioSource.SetCustomCurve(AudioSourceCurveType.CustomRolloff, _setting3D._volumeSpread);
             audioSource.rolloffMode = AudioRolloffMode.Custom;
 
             Records.Add(sourceKey, audioSource);
@@ -273,15 +273,15 @@ namespace LazyBot.Audio.Data
 
             float distance = Vector3.Distance(source, listener);
 
-            if (((m_settingDetection.m_cutOnMin) && (distance < m_settingDetection.m_minDistance)) ||
-                ((m_settingDetection.m_cutOnMax) && (distance > m_settingDetection.m_maxDistance)))
+            if (((_settingDetection._cutOnMin) && (distance < _settingDetection._minDistance)) ||
+                ((_settingDetection._cutOnMax) && (distance > _settingDetection._maxDistance)))
                 return 0.0f;
 
             float relativeAudibility = LazyBot.Utility.Data.FloatHelper.
-                Map(distance, (m_settingDetection.m_minDistance < distance) ? m_settingDetection.m_minDistance : distance,
-                    (m_settingDetection.m_maxDistance > distance) ? m_settingDetection.m_maxDistance : distance, 0, 1);
+                Map(distance, (_settingDetection._minDistance < distance) ? _settingDetection._minDistance : distance,
+                    (_settingDetection._maxDistance > distance) ? _settingDetection._maxDistance : distance, 0, 1);
 
-            return m_settingDetection.m_loudness * m_settingDetection.m_loudnessSpread.Evaluate(relativeAudibility);
+            return _settingDetection._loudness * _settingDetection._loudnessSpread.Evaluate(relativeAudibility);
         }
 
     }

@@ -36,14 +36,14 @@ namespace LazyBot.Target.Data
     {
         public class TargetContainer
         {
-            private Dictionary<uint, List<Target>> m_targets;//<searchingAreaId, >
+            private Dictionary<uint, List<Target>> _targets;//<searchingAreaId, >
 
             public Dictionary<uint, List<Target>> Targets
             {
                 get
                 {
-                    return m_targets ??
-                        (m_targets = new Dictionary<uint, List<Target>>());
+                    return _targets ??
+                        (_targets = new Dictionary<uint, List<Target>>());
                 }
             }
 
@@ -51,13 +51,13 @@ namespace LazyBot.Target.Data
             public void Erase(uint searchingAreaId)
             {
                 if (Targets.ContainsKey(searchingAreaId))
-                    m_targets.Remove(searchingAreaId);
+                    _targets.Remove(searchingAreaId);
             }
 
             public void AddArea(uint searchingAreaId)
             {
                 if (!Targets.ContainsKey(searchingAreaId))
-                    m_targets.Add(searchingAreaId, new List<Target>());
+                    _targets.Add(searchingAreaId, new List<Target>());
             }
 
             public List<Target> Cut(uint searchingAreaId)
@@ -66,7 +66,7 @@ namespace LazyBot.Target.Data
 
                 if (!Targets.TryGetValue(searchingAreaId, out targets)) return null;
 
-                m_targets.Remove(searchingAreaId);
+                _targets.Remove(searchingAreaId);
                 return targets;
             }
 
@@ -120,7 +120,7 @@ namespace LazyBot.Target.Data
             {
                 AddArea(searchingAreaId);
 
-                m_targets[searchingAreaId].Add(target);
+                _targets[searchingAreaId].Add(target);
             }
 
             public Target Remove(uint searchingAreaId, int targetIndex)
@@ -137,7 +137,7 @@ namespace LazyBot.Target.Data
                 {
                     newIndo.Add(property.Item1, property.Item2);
                 }
-                m_targets[searchingAreaId].Add(newIndo);
+                _targets[searchingAreaId].Add(newIndo);
             }
             
         }

@@ -14,7 +14,7 @@ namespace LazyBot.Navigation
         /// Distance at which points with same priority are 
         /// considered as equal.
         /// </summary>
-        [SerializeField] private float m_nearnessPrecision = 0.1f;
+        [SerializeField] private float _nearnessPrecision = 0.1f;
 
         /// <summary>
         /// Return next with higher priority or 
@@ -27,7 +27,7 @@ namespace LazyBot.Navigation
             if (Points.Count == 0)
                 throw new System.Exception("Can't get destination, navigation is empty.");
 
-            if (m_isRandom)
+            if (_isRandom)
                 return GetRandomPoint(ref destinationIndex);
 
             float distanceTemp = 0.0f,
@@ -36,10 +36,10 @@ namespace LazyBot.Navigation
 
             for (int i = 0; i < Points.Count; i++)
             {
-                distanceTemp = Vector3.Distance(m_ownerTransform.position, Points[i].Transform.position);
-                if ((i == m_previousPoint) ||
+                distanceTemp = Vector3.Distance(_ownerTransform.position, Points[i].Transform.position);
+                if ((i == _previousPoint) ||
                     (Points[i].Priority < priority)||
-                    ((Points[i].Priority == priority) && (distanceTemp - distance > m_nearnessPrecision))) continue;
+                    ((Points[i].Priority == priority) && (distanceTemp - distance > _nearnessPrecision))) continue;
 
                 priority = Points[i].Priority;
                 distance = distanceTemp;

@@ -19,7 +19,7 @@ namespace LazyBot.Navigation
             if (Points.Count == 0)
                 throw new System.Exception("Can't get destination, navigation is empty.");
 
-            if (m_isRandom)
+            if (_isRandom)
                 return GetRandomPoint(ref destinationIndex);
 
             return GetNextPoint(ref destinationIndex);

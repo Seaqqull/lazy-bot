@@ -14,75 +14,75 @@ namespace LazyBot.Area.Searching
         [System.Serializable]
         public class TargetUpdateEvent : UnityEvent<SearchingArea, LazyBot.Area.Detection.DetectionArea> { }
 
-        [SerializeField] private LazyBot.Area.Data.ObservationType m_type = LazyBot.Area.Data.ObservationType.Undefined;
-        [SerializeField] private LazyBot.Target.Property.TargetTypeSO m_targetType;
+        [SerializeField] private LazyBot.Area.Data.ObservationType _type = LazyBot.Area.Data.ObservationType.Undefined;
+        [SerializeField] private LazyBot.Target.Property.TargetTypeSO _targetType;
 
         /// <summary>
         /// Update frequency of target detection.
         /// </summary>
-        [SerializeField] private FloatReference m_updateRate;
-        [SerializeField] [Range(0, ushort.MaxValue)] private ushort m_priority = 0;
+        [SerializeField] private FloatReference _updateRate;
+        [SerializeField] [Range(0, ushort.MaxValue)] private ushort _priority = 0;
 
-        [SerializeField] private DetectionValidatorSO[] m_onTargetDetection;
-        [SerializeField] private SearchingAreaEvent m_onInit;
-        [SerializeField] private TargetUpdateEvent m_onTargetUpdate;
-        [SerializeField] private SearchingAreaEvent m_onTargetClear;
-        [SerializeField] private SearchingAreaEvent m_onDrawGizmo;
+        [SerializeField] private DetectionValidatorSO[] _onTargetDetection;
+        [SerializeField] private SearchingAreaEvent _onInit;
+        [SerializeField] private TargetUpdateEvent _onTargetUpdate;
+        [SerializeField] private SearchingAreaEvent _onTargetClear;
+        [SerializeField] private SearchingAreaEvent _onDrawGizmo;
 
         /// <summary>
         /// Area characteristics.
         /// </summary>
-        [SerializeField] private LazyBot.Area.Data.AreaData m_data;
+        [SerializeField] private LazyBot.Area.Data.AreaData _data;
 
         /// <summary>
         /// Reference on target detection function.
         /// </summary>
-        private Coroutine m_searchingCorotation;
-        private static uint m_idCounter = 0;
-        private uint m_id;
+        private Coroutine _searchingCorotation;
+        private static uint _idCounter = 0;
+        private uint _id;
 
         public LazyBot.Target.Property.TargetTypeSO TargetType
         {
-            get { return this.m_targetType; }
+            get { return this._targetType; }
         }
         public LazyBot.Area.Data.ObservationType Type
         {
-            get { return this.m_type; }
+            get { return this._type; }
         }
         public LazyBot.Area.Data.AreaData Data
         {
-            get { return this.m_data; }
+            get { return this._data; }
         }
         public Transform Socket
         {
-            get { return this.m_data.Socket; }
+            get { return this._data.Socket; }
         }
         public ushort Priority
         {
-            get { return this.m_priority; }
+            get { return this._priority; }
         }        
         public uint Id
         {
-            get { return this.m_id; }
+            get { return this._id; }
         }
         
 
         private void Awake()
         {
-            m_id = m_idCounter++;
+            _id = _idCounter++;
 
-            m_data.Socket = m_data.Socket ?? this.transform;
+            _data.Socket = _data.Socket ?? this.transform;
         }
 
         private void Start()
         {
 #if UNITY_EDITOR
-            if (m_targetType == null)
+            if (_targetType == null)
             {
                 Debug.LogError("Target type empty!Need to set it to perform target updates.", gameObject);
             }
 #endif
-            m_onInit.Invoke(this);
+            _onInit.Invoke(this);
         }
 
         private void OnEnable()
@@ -98,10 +98,10 @@ namespace LazyBot.Area.Searching
         private void OnDrawGizmos()
         {
 #if UNITY_EDITOR
-            if (!m_data.Socket)
-                m_data.Socket = transform;
+            if (!_data.Socket)
+                _data.Socket = transform;
 
-            m_onDrawGizmo.Invoke(this);
+            _onDrawGizmo.Invoke(this);
 #endif
         }
 
@@ -110,11 +110,11 @@ namespace LazyBot.Area.Searching
         {
             if (isActive)
             {
-                m_searchingCorotation = StartCoroutine("FindTargetsWithDelay", m_updateRate.Value);
+                _searchingCorotation = StartCoroutine("FindTargetsWithDelay", _updateRate.Value);
             }
-            else if ((!isActive) && (m_searchingCorotation != null))
+            else if ((!isActive) && (_searchingCorotation != null))
             {
-                StopCoroutine(m_searchingCorotation);
+                StopCoroutine(_searchingCorotation);
             }
             else
             {
@@ -128,11 +128,11 @@ namespace LazyBot.Area.Searching
             {
                 yield return new WaitForSeconds(delay);
 
-                m_onTargetClear.Invoke(this);
+                _onTargetClear.Invoke(this);
 
-                for (int i = 0; i < m_data.EnemyTags.Length; i++)
+                for (int i = 0; i < _data.EnemyTags.Length; i++)
                 {
-                    GameObject[] targets = GameObject.FindGameObjectsWithTag(m_data.EnemyTags[i]);
+                    GameObject[] targets = GameObject.FindGameObjectsWithTag(_data.EnemyTags[i]);
 
                     for (int j = 0; j < targets.Length; j++)
                     {
@@ -142,17 +142,17 @@ namespace LazyBot.Area.Searching
 
                         foreach (var dArea in areas)
                         {                            
-                            for (k = 0; k < m_onTargetDetection.Length; k++)
-                                if (!m_onTargetDetection[k].Validate(this, dArea)) break;
+                            for (k = 0; k < _onTargetDetection.Length; k++)
+                                if (!_onTargetDetection[k].Validate(this, dArea)) break;
 
                             // If one of the targets areas was detected, then there is no sense 
                             // to check other because we will grab the same data from them
                             
                             // Could be upgraded with detection mask(on each dArea)
                             // then break will be removed, because we'll get different data from each dArea
-                            if ((k == m_onTargetDetection.Length) && (m_targetType != null))
+                            if ((k == _onTargetDetection.Length) && (_targetType != null))
                             {
-                                m_onTargetUpdate.Invoke(this, dArea);
+                                _onTargetUpdate.Invoke(this, dArea);
                                 break;
                             }                            
                         }                        
