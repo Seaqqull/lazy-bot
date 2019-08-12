@@ -20,6 +20,10 @@ namespace LazyBot.Entity
         /// Period of destination path update.
         /// </summary>
         [SerializeField] [Range(0, ushort.MaxValue)] protected float _pathUpdateDelay;
+        /// <summary>
+        /// Used to controll the transition between states(eg: restriction, permission);
+        /// </summary>
+        [SerializeField] [Range(0, 100)] protected int _awareness;
         [SerializeField] protected LazyBot.Entity.Data.EntityState[] _statesSteady;
         [SerializeField] protected LazyBot.Entity.Data.EntityState[] _states;
 
