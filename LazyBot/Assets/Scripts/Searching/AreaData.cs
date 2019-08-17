@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace LazyBot.Area.Data
 {
@@ -58,7 +59,19 @@ namespace LazyBot.Area.Data
         /// Tags, which used to search targets.
         /// </summary>
         [SerializeField] [TagSelector] private string[] _enemyTags;
-        
+
+
+        private IReadOnlyList<string> _enemyTagsRestricted;
+
+
+        public IReadOnlyList<string> EnemyTags
+        {
+            get
+            {
+                return this._enemyTagsRestricted ??
+                    (this._enemyTagsRestricted = this._enemyTags);
+            }
+        }
         public LayerMask ObstacleMask
         {
             get
@@ -82,18 +95,7 @@ namespace LazyBot.Area.Data
             {
                 this._targetMask = value;
             }
-        }
-        public string[] EnemyTags
-        {
-            get
-            {
-                return this._enemyTags;
-            }
-            set
-            {
-                this._enemyTags = value;
-            }
-        }
+        }        
         public Transform Socket
         {
             get { return this._socket; }

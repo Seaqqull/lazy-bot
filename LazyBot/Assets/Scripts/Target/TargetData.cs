@@ -36,14 +36,16 @@ namespace LazyBot.Target.Data
     {
         public class TargetContainer
         {
-            private Dictionary<uint, List<Target>> _targets;//<searchingAreaId, >
+            private IReadOnlyDictionary<uint, List<Target>> _targetsRestricted;
+            private Dictionary<uint, List<Target>> _targets =
+                new Dictionary<uint, List<Target>>();//<searchingAreaId, >
 
-            public Dictionary<uint, List<Target>> Targets
+            public IReadOnlyDictionary<uint, List<Target>> Targets
             {
                 get
                 {
-                    return _targets ??
-                        (_targets = new Dictionary<uint, List<Target>>());
+                    return this._targetsRestricted ??
+                        (this._targetsRestricted = this._targets);
                 }
             }
 
@@ -141,15 +143,18 @@ namespace LazyBot.Target.Data
             }
             
         }
-        
-        private Dictionary<LazyBot.Target.Property.TargetTypeSO, TargetContainer> _data;
 
-        public Dictionary<LazyBot.Target.Property.TargetTypeSO, TargetContainer> Data
+        private IReadOnlyDictionary<LazyBot.Target.Property.TargetTypeSO, TargetContainer> _dataRestricted;
+        private Dictionary<LazyBot.Target.Property.TargetTypeSO, TargetContainer> _data = 
+            new Dictionary<Property.TargetTypeSO, TargetContainer>();        
+
+
+        public IReadOnlyDictionary<LazyBot.Target.Property.TargetTypeSO, TargetContainer> Data
         {
             get
             {
-                return _data ??
-                    (_data = new Dictionary<Property.TargetTypeSO, TargetContainer>());
+                return this._dataRestricted ??
+                    (this._dataRestricted = this._data);
             }
         }
 

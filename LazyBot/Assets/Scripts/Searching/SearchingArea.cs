@@ -130,7 +130,7 @@ namespace LazyBot.Area.Searching
 
                 _onTargetClear.Invoke(this);
 
-                for (int i = 0; i < _data.EnemyTags.Length; i++)
+                for (int i = 0; i < _data.EnemyTags.Count; i++)
                 {
                     GameObject[] targets = GameObject.FindGameObjectsWithTag(_data.EnemyTags[i]);
 

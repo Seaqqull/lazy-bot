@@ -22,12 +22,22 @@ namespace LazyBot.Audio
         /// </summary>
         [SerializeField] private bool _isNested = true;
 
-        [SerializeField] private List<LazyBot.Audio.Data.AudioSource> _audios;
+        [SerializeField] private List<LazyBot.Audio.Data.AudioSource> _audios = 
+            new List<Data.AudioSource>();
 
 
+        private IReadOnlyList<LazyBot.Audio.Data.AudioSource> _audiosRestricted;
         private List<LazyBot.Audio.AudioContainer> _containers;
 
 
+        public IReadOnlyList<LazyBot.Audio.Data.AudioSource> Audios
+        {
+            get
+            {
+                return (this._audiosRestricted) ??
+                    (this._audiosRestricted = this._audios);
+            }
+        }
         public List<LazyBot.Audio.AudioContainer> Containers
         {
             get
@@ -38,14 +48,6 @@ namespace LazyBot.Audio
             set
             {
                 this._containers = value;
-            }
-        }
-        public List<LazyBot.Audio.Data.AudioSource> Audios
-        {
-            get
-            {
-                return (this._audios) ??
-                    (this._audios = new List<LazyBot.Audio.Data.AudioSource>());
             }
         }
         /// <summary>

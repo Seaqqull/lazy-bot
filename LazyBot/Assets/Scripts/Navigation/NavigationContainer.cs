@@ -13,7 +13,8 @@ namespace LazyBot.Navigation
         /// </summary>
         [SerializeField] protected Transform _ownerTransform;
 
-        [SerializeField] protected List<LazyBot.Navigation.Data.NavigationPoint> _points;
+        [SerializeField] protected List<LazyBot.Navigation.Data.NavigationPoint> _points = 
+            new List<LazyBot.Navigation.Data.NavigationPoint>();
 
         /// <summary>
         /// Is next destination point random.
@@ -26,14 +27,16 @@ namespace LazyBot.Navigation
         [SerializeField] protected Color _lineColor = Color.green;
 
 
-        public List<LazyBot.Navigation.Data.NavigationPoint> Points
+        protected IReadOnlyList<LazyBot.Navigation.Data.NavigationPoint> _pointsRestricted;
+
+
+        public IReadOnlyList<LazyBot.Navigation.Data.NavigationPoint> Points
         {
             get
             {
-                return this._points ??
-                    (this._points = new List<LazyBot.Navigation.Data.NavigationPoint>());
+                return this._pointsRestricted ??
+                    (this._pointsRestricted = this._points);
             }
-            //set { this._points = value; }
         }
         /// <summary>
         /// Destination navigation point.
@@ -135,7 +138,7 @@ namespace LazyBot.Navigation
         /// </summary>
         public void Clear()
         {
-            Points.Clear();
+            _points.Clear();
             ResetToZero();
         }
 
@@ -160,7 +163,7 @@ namespace LazyBot.Navigation
                 throw new System.Exception(string.Format("No such {0} index to be removed.", index));
 
             Points[index].DestroyPoint();
-            Points.RemoveAt(index);
+            _points.RemoveAt(index);
         }
 
         /// <summary>
@@ -176,7 +179,7 @@ namespace LazyBot.Navigation
                 throw new System.Exception(string.Format("No such {0} index to be removed.", index));
 
             Points[index].DestroyPoint();
-            Points.RemoveAt(index);
+            _points.RemoveAt(index);
 
             if (index == relIndex)
                 relIndex = -1;
@@ -329,7 +332,7 @@ namespace LazyBot.Navigation
         /// <param name="point">Point to add.</param>
         public void Add(LazyBot.Navigation.Data.NavigationPoint point)
         {
-            Points.Add(point);
+            _points.Add(point);
         }
 
         /// <summary>
@@ -340,7 +343,7 @@ namespace LazyBot.Navigation
         {
             for (int i = 0; i < Points.Count; i++)
             {
-                Points.Add(points[i]);
+                _points.Add(points[i]);
             }
             points.Clear();
         }
@@ -353,7 +356,7 @@ namespace LazyBot.Navigation
         public void Add(LazyBot.Navigation.Data.NavigationPoint point, ref int index)
         {
             index = Points.Count;
-            Points.Add(point);
+            _points.Add(point);
         }
 
         /// <summary>

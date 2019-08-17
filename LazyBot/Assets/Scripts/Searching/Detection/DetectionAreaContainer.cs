@@ -13,16 +13,22 @@ namespace LazyBot.Area.Detection
     {
         [SerializeField] private DetectionArea[] _tracingAreas;
 
+
+        private IReadOnlyList<DetectionArea> _tracingAreasRestricted;
+
+
         /// <summary>
         /// Wether to load detection areas at startup.
         /// </summary>
         private bool _isAutoLoad;
 
-        public DetectionArea[] TracingAreas
+
+        public IReadOnlyList<DetectionArea> TracingAreas
         {
             get
             {
-                return this._tracingAreas;
+                return this._tracingAreasRestricted ??
+                    (this._tracingAreasRestricted = this._tracingAreas);
             }
         }
         public int Length
@@ -89,7 +95,6 @@ namespace LazyBot.Area.Detection
                     break;
                 }
         }
-
 
         /// <summary>
         /// Returns position of specific area in scene.

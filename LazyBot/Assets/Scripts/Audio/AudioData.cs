@@ -77,21 +77,23 @@ namespace LazyBot.Audio.Data
         [SerializeField] Audio3D _setting3D;
 
 
+        private IReadOnlyDictionary<string, AudioSourceEngine> _recordsRestricted;
         /// <summary>
         /// Attached to gameObject audioSource.
         /// </summary>
-        private Dictionary<string, AudioSourceEngine> _records;
-
+        private Dictionary<string, AudioSourceEngine> _records = 
+            new Dictionary<string, AudioSourceEngine>();
+        
 
         /// <summary>
         /// Attached to gameObject audioSource.
         /// </summary>
-        public Dictionary<string, AudioSourceEngine> Records
+        public IReadOnlyDictionary<string, AudioSourceEngine> Records
         {
             get
             {
-                return (this._records) ??
-                    (this._records = new Dictionary<string, AudioSourceEngine>());
+                return (this._recordsRestricted) ??
+                    (this._recordsRestricted = this._records);
             }
         }
         public float OutherRadiusDetection
@@ -202,7 +204,7 @@ namespace LazyBot.Audio.Data
             audioSource.Stop();
             UnityEngine.Object.Destroy(audioSource);
 
-            Records.Remove(audioKey);
+            _records.Remove(audioKey);
 
             return true;
         }
@@ -256,7 +258,7 @@ namespace LazyBot.Audio.Data
             audioSource.SetCustomCurve(AudioSourceCurveType.CustomRolloff, _setting3D._volumeSpread);
             audioSource.rolloffMode = AudioRolloffMode.Custom;
 
-            Records.Add(sourceKey, audioSource);
+            _records.Add(sourceKey, audioSource);
 
             return sourceKey;
         }
