@@ -146,7 +146,7 @@ namespace LazyBot.Entity
                     (!(state.CheckOn & _states[_activeState].Id)) ||
                     (!(state.State.Validate(this)))) continue;
 
-                state.State.OnStateExit(this);
+                _states[_activeState].State.OnStateExit(this);
 
                 _activeState = _stateOrder[i].X;
                 OnStateChange();
