@@ -58,8 +58,9 @@ namespace LazyBot.Area.Data
         /// <summary>
         /// Tags, which used to search targets.
         /// </summary>
+#pragma warning disable 0649
         [SerializeField] [TagSelector] private string[] _enemyTags;
-
+#pragma warning restore 0649
 
         private IReadOnlyList<string> _enemyTagsRestricted;
 

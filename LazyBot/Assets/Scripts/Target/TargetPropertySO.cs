@@ -7,8 +7,10 @@ namespace LazyBot.Target.Property
     /// Specific target property
     /// </summary>
     public abstract class TargetPropertySO : ScriptableObject
-    {        
+    {
+#pragma warning disable 0649
         [SerializeField] private PropertyContacts _data;
+#pragma warning restore 0649
 
         public string Name
         {

@@ -4,8 +4,10 @@ namespace LazyBot.Entity
 {
     public class EntityControllerSimple : EntityController
     {
+#pragma warning disable 0649
         [SerializeField] [Range(0.0f, ushort.MaxValue)] private float _angularSpeed;
         [SerializeField] [Range(0.0f, ushort.MaxValue)] private float _maxMovementSpeed;
+#pragma warning restore 0649
 
         private float _speed;        
         private Vector3 _destination;

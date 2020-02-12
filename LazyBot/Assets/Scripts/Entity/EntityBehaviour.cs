@@ -8,6 +8,7 @@ namespace LazyBot.Entity
     /// </summary>
     public class EntityBehaviour : MonoBehaviour
     {
+#pragma warning disable 0649
         [SerializeField] private LazyBot.Entity.Data.SliderFloatEntityData _health;
         [SerializeField] private LazyBot.Entity.Data.SliderFloatEntityData _stamina;
 
@@ -24,6 +25,7 @@ namespace LazyBot.Entity
         /// Triggers on death.
         /// </summary>
         [SerializeField] private UnityEvent _onDeath;
+#pragma warning restore 0649
 
         private static uint _idCounter = 0;
         private bool _isDeath;

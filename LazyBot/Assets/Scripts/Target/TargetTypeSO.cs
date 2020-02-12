@@ -9,10 +9,12 @@ namespace LazyBot.Target.Property
     [CreateAssetMenu(menuName = "Target/Type")]
     public class TargetTypeSO : ScriptableObject, IEquatable<TargetTypeSO>
     {
+#pragma warning disable 0649
         [SerializeField] private string _name;
         [SerializeField] private LazyBot.Entity.Data.IntMask _mask;
 
         [SerializeField] private bool _dataOnDetection;
+#pragma warning restore 0649
 
         public LazyBot.Entity.Data.IntMask Mask
         {

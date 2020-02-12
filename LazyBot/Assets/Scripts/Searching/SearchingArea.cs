@@ -14,6 +14,7 @@ namespace LazyBot.Area.Searching
         [System.Serializable]
         public class TargetUpdateEvent : UnityEvent<SearchingArea, LazyBot.Area.Detection.DetectionArea> { }
 
+#pragma warning disable 0649
         [SerializeField] private LazyBot.Area.Data.ObservationType _type = LazyBot.Area.Data.ObservationType.Undefined;
         [SerializeField] private LazyBot.Target.Property.TargetTypeSO _targetType;
 
@@ -33,6 +34,7 @@ namespace LazyBot.Area.Searching
         /// Area characteristics.
         /// </summary>
         [SerializeField] private LazyBot.Area.Data.AreaData _data;
+#pragma warning restore 0649
 
         /// <summary>
         /// Reference on target detection function.

@@ -47,7 +47,7 @@ namespace LazyBot.Audio.Data
             [SerializeField] public AnimationCurve _volumeSpread = AnimationCurve.Linear(0, 1, 1, 0);
         }
 
-
+#pragma warning disable 0649
         [SerializeField] private string _name;
 
         [SerializeField] private AudioMixerGroup _output;
@@ -55,6 +55,7 @@ namespace LazyBot.Audio.Data
 
         [SerializeField] private bool _loop;
         [SerializeField] private bool _mute;
+
 
         [SerializeField] [Range(0.0f, ushort.MaxValue)] private float _playDelay;
         /// <summary>
@@ -75,7 +76,7 @@ namespace LazyBot.Audio.Data
 
         [SerializeField] AudioDetection _settingDetection;
         [SerializeField] Audio3D _setting3D;
-
+#pragma warning restore 0649
 
         private IReadOnlyDictionary<string, AudioSourceEngine> _recordsRestricted;
         /// <summary>

@@ -8,8 +8,10 @@ namespace LazyBot.Manager
 {
     public class EntityManager : MonoBehaviour
     {
+#pragma warning disable 0649
         [SerializeField] private FloatReference _updateRate;
-        [SerializeField] private TargetPropertySO[] _properties;        
+        [SerializeField] private TargetPropertySO[] _properties;
+#pragma warning restore 0649
 
         private static EntityManager _entityManager;
 

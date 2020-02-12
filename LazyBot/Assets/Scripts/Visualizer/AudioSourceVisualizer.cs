@@ -9,7 +9,9 @@ namespace LazyBot.Visualizer
     /// </summary>
     public class AudioSourceVisualizer : MonoBehaviour
     {
+#pragma warning disable 0649
         [SerializeField] private LazyBot.Audio.AudioContainer _audios;
+#pragma warning restore 0649
 
         /// <summary>
         /// Is transition visualized or drawn as two siple circle.

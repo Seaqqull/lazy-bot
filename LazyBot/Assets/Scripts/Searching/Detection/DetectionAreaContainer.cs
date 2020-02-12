@@ -11,6 +11,7 @@ namespace LazyBot.Area.Detection
     /// </summary>
     public class DetectionAreaContainer : MonoBehaviour, IEnumerable<DetectionArea>
     {
+#pragma warning disable 0649
         [SerializeField] private DetectionArea[] _tracingAreas;
 
 
@@ -21,7 +22,7 @@ namespace LazyBot.Area.Detection
         /// Wether to load detection areas at startup.
         /// </summary>
         private bool _isAutoLoad;
-
+#pragma warning restore 0649
 
         public IReadOnlyList<DetectionArea> TracingAreas
         {

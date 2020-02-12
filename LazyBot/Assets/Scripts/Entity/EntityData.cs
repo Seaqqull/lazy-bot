@@ -450,7 +450,9 @@ namespace LazyBot.Entity.Data
     [System.Serializable]
     public class EntityState
     {
-        /*[SerializeField]*/ private uint _id;
+#pragma warning disable 0649
+        /*[SerializeField]*/
+        private uint _id;
         [SerializeField] [Range(0, ushort.MaxValue)] private int _priority;
         /// <summary>
         /// Is state can be ended, when state in sleep mode.
@@ -469,6 +471,7 @@ namespace LazyBot.Entity.Data
         /// State methods.
         /// </summary>
         [SerializeField] private EntityStateSO _state;
+#pragma warning restore 0649
 
         private bool _isActive;
 

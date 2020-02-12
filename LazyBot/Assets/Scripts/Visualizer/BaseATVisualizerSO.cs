@@ -6,7 +6,10 @@ using UnityEngine;
 public class BaseATVisualizerSO : AreaTargetVisualizerSO
 {
     [SerializeField] private Color _lineColor = Color.white;
+
+#pragma warning disable 0649
     [SerializeField] private FloatReference _lineLifetime;
+#pragma warning restore 0649
 
     public override void Visualize(SearchingArea searchingArea, DetectionArea detectionArea)
     {
