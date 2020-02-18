@@ -9,31 +9,33 @@ namespace LazyBot.Navigation
     /// </summary>
     public class IntermediatePoint : MonoBehaviour, IEquatable<IntermediatePoint>
     {
+#pragma warning disable 0649
+        [System.Serializable]
+        public class IPointIdentifier : Utility.Data.Identifier<IntermediatePoint> { }
+
+        
         /// <summary>
         /// Size of gizmo.
         /// </summary>
         [SerializeField] private float _size = 0.3f;
+
+        [SerializeField] protected IPointIdentifier _id;
+
         /// <summary>
         /// Color of gizmo.
         /// </summary>
         [SerializeField] private Color _color = Color.black;
-
-        /// <summary>
-        /// Id to perform comparison.
-        /// </summary>
-        protected static uint _idCounter = 0;
-        protected uint _id;
-
+#pragma warning restore 0649
 
         public uint Id
         {
-            get { return this._id; }
+            get { return this._id.Id; }
         }
 
 
         private void Awake()
         {
-            _id = _idCounter++;
+            _id.CalculateId();
         }
 
         private void OnDrawGizmos()

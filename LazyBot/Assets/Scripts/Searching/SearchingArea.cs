@@ -8,9 +8,11 @@ namespace LazyBot.Area.Searching
     /// Searches for targets and sends found to subscriber.
     /// </summary>
     public class SearchingArea : MonoBehaviour
-    {
+    {        
         [System.Serializable]
         public class SearchingAreaEvent : UnityEvent<SearchingArea> { }
+        [System.Serializable]
+        public class SAreaIdentifier : Utility.Data.Identifier<SearchingArea> { }
         [System.Serializable]
         public class TargetUpdateEvent : UnityEvent<SearchingArea, LazyBot.Area.Detection.DetectionArea> { }
 
@@ -30,6 +32,7 @@ namespace LazyBot.Area.Searching
         [SerializeField] private SearchingAreaEvent _onTargetClear;
         [SerializeField] private SearchingAreaEvent _onDrawGizmo;
 
+        [SerializeField] private SAreaIdentifier _id;
         /// <summary>
         /// Area characteristics.
         /// </summary>
@@ -39,9 +42,7 @@ namespace LazyBot.Area.Searching
         /// <summary>
         /// Reference on target detection function.
         /// </summary>
-        private Coroutine _searchingCorotation;
-        private static uint _idCounter = 0;
-        private uint _id;
+        private Coroutine _searchingCorotation;        
 
         public LazyBot.Target.Property.TargetTypeSO TargetType
         {
@@ -65,13 +66,13 @@ namespace LazyBot.Area.Searching
         }        
         public uint Id
         {
-            get { return this._id; }
+            get { return this._id.Id; }
         }
         
 
         private void Awake()
         {
-            _id = _idCounter++;
+            _id.CalculateId();
 
             _data.Socket = _data.Socket ?? this.transform;
         }

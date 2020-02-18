@@ -8,9 +8,15 @@ namespace LazyBot.Area.Detection
     /// </summary>
     public abstract class DetectionArea : MonoBehaviour
     {
+        [System.Serializable]
+        public class DAreaIdentifier : Utility.Data.Identifier<DetectionArea> { }
+
+
         protected static Color editor_gizmo_color = Color.blue;
 
         [SerializeField] protected string _name;
+
+        [SerializeField] protected DAreaIdentifier _id;
 
         [SerializeField] protected Data.HitAreaState _state = Data.HitAreaState.Enabled;
 
@@ -23,10 +29,8 @@ namespace LazyBot.Area.Detection
 
         protected Color _gizmoColor = editor_gizmo_color;
 
-        protected static uint _idCounter = 0;
         protected bool _wasFound = false;
         protected Collider _colider;
-        protected uint _id;
 
         public Func<Vector3, float> OnSound
         {
@@ -86,7 +90,7 @@ namespace LazyBot.Area.Detection
         }
         public uint Id
         {
-            get { return this._id; }
+            get { return this._id.Id; }
         }
         
         public Color _gizmoColorInactive = Color.grey;
@@ -97,7 +101,7 @@ namespace LazyBot.Area.Detection
 
         protected virtual void Awake()
         {
-            _id = _idCounter++;
+            _id.CalculateId();
 
             _colider = GetCollider();
         }

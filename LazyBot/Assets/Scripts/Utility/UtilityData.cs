@@ -234,5 +234,65 @@ namespace LazyBot.Utility.Data
                 value.y.Map(istart.y, istop.y, ostart.y, ostop.y),
                 value.z.Map(istart.z, istop.z, ostart.z, ostop.z));
         }        
-    }    
+    }
+
+
+    /// <summary>
+    /// Used to create id field.
+    /// </summary>
+    /// <typeparam name="T">Type of class. Used to vary idCounter for each class.</typeparam>
+    [System.Serializable]
+    public class Identifier<T>
+    {
+        protected static uint _idCounter = 0;
+
+        protected DataState _state = DataState.Unknown;
+        [ReadOnly][SerializeField] protected uint _id;
+
+        public DataState State
+        {
+            get { return this._state; }
+        }
+        public uint Id
+        {
+            get { return this._id; }
+        }
+
+
+        /// <summary>
+        /// Used to assign id for each class.
+        /// </summary>
+        public void CalculateId()
+        {
+            if (_state == DataState.Unknown)
+            {
+                _id = _idCounter++;
+                _state = DataState.Updated;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Used to create id field with the additional local identifier.
+    /// </summary>
+    /// <typeparam name="T">Type of class. Used to vary idCounter for each class.</typeparam>
+    [System.Serializable]
+    public class ExtendedIdentifier<T> : Identifier<T>
+    {
+#pragma warning disable 0649
+        [SerializeField] private uint _additionalId;
+#pragma warning restore 0649
+
+        public uint AdditionalId
+        {
+            get { return this._additionalId; }
+        }
+    }
+
+    /*
+     * In such way we can create a dedicated identifier for class, 
+     * that will be serialized in the inspector.
+    [System.Serializable]
+    public class EntityIdentifier : Utility.Data.Identifier<EntityController> { }
+    */
 }

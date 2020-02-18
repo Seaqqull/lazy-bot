@@ -8,7 +8,13 @@ namespace LazyBot.Entity
     /// </summary>
     public class EntityBehaviour : MonoBehaviour
     {
+        [System.Serializable]
+        public class EntityBIdentifier : Utility.Data.Identifier<EntityBehaviour> { }
+
+
 #pragma warning disable 0649
+        [SerializeField] private EntityBIdentifier _id;
+
         [SerializeField] private LazyBot.Entity.Data.SliderFloatEntityData _health;
         [SerializeField] private LazyBot.Entity.Data.SliderFloatEntityData _stamina;
 
@@ -26,10 +32,8 @@ namespace LazyBot.Entity
         /// </summary>
         [SerializeField] private UnityEvent _onDeath;
 #pragma warning restore 0649
-
-        private static uint _idCounter = 0;
+       
         private bool _isDeath;
-        private uint _id;
 
         /// <summary>
         /// Point in scene used to chase the target.
@@ -44,13 +48,13 @@ namespace LazyBot.Entity
         }
         public uint Id
         {
-            get { return this._id; }
+            get { return this._id.Id; }
         }
 
 
         protected virtual void Awake()
         {
-            _id = _idCounter++;
+            _id.CalculateId();
         }
 
         protected virtual void Update()
