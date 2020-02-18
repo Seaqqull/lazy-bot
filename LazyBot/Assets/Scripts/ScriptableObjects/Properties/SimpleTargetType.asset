@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Simple
   _mask:
-    _values: 0
+    _values: 0/1
   _dataOnDetection: 1

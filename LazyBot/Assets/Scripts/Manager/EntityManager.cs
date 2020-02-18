@@ -166,7 +166,10 @@ namespace LazyBot.Manager
             //fill properties values
             foreach (var propertyId in propertyMask)
             {
-                properties.Add(GetProperty(entityid, propertyId));
+                (uint, dynamic) tmp = GetProperty(entityid, propertyId);
+                // Excluding nonexistent properties
+                if (tmp.Item2 != null)
+                    properties.Add(tmp);
             }
 
             return properties;

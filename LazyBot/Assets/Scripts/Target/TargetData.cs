@@ -2,8 +2,58 @@
 using System;
 
 namespace LazyBot.Target.Data
-{    
-    using Target = Dictionary<uint, dynamic>;//<propertyId, targetData>
+{
+    public class Target
+    {
+#pragma warning disable 0414
+        private Dictionary<uint, dynamic> _data;
+        // We assume, that by default if laterCall is null, then the data was filled directly
+        private bool _isFilled = true; 
+        private Action _lateCall;
+#pragma warning restore 0414
+
+        public Dictionary<uint, dynamic> Data
+        {
+            get
+            {
+                return this._data ?? 
+                    (this._data = new Dictionary<uint, dynamic>());
+            }
+        }
+        public bool IsFilled
+        {
+            get 
+            {
+                return this._isFilled;
+            }
+        }
+
+        public bool FillData()
+        {
+            if (_lateCall == null) return false;
+
+#pragma warning disable 0168
+            try
+            {
+                _lateCall();
+                _isFilled = true;
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+#pragma warning restore 0168
+        }
+
+        public void SetCall(Action lateCall)
+        {
+            _isFilled = false;
+            _lateCall = lateCall;
+        }
+
+    }
 
     [System.Serializable]
     public class PropertyContacts : IEquatable<PropertyContacts>
@@ -125,6 +175,17 @@ namespace LazyBot.Target.Data
                 _targets[searchingAreaId].Add(target);
             }
 
+            public void AddTarget(uint searchingAreaId, Action action)
+            {
+                AddArea(searchingAreaId);
+
+                Target newIndo = new Target();
+
+                newIndo.SetCall(action);
+
+                _targets[searchingAreaId].Add(newIndo);
+            }
+
             public Target Remove(uint searchingAreaId, int targetIndex)
             {                
                 return Cut(searchingAreaId, targetIndex);
@@ -137,11 +198,10 @@ namespace LazyBot.Target.Data
                 Target newIndo = new Target();
                 foreach (var property in data)
                 {
-                    newIndo.Add(property.Item1, property.Item2);
+                    newIndo.Data.Add(property.Item1, property.Item2);
                 }
                 _targets[searchingAreaId].Add(newIndo);
             }
-            
         }
 
         private IReadOnlyDictionary<LazyBot.Target.Property.TargetTypeSO, TargetContainer> _dataRestricted;
@@ -159,15 +219,26 @@ namespace LazyBot.Target.Data
         }
 
 
-        public TargetContainer this[LazyBot.Target.Property.TargetTypeSO key]
+        public TargetContainer this[LazyBot.Target.Property.TargetTypeSO targetType]
+        {
+            get
+            {                
+                Data.TryGetValue(targetType, out TargetContainer targetContainer);
+                return targetContainer;
+            }            
+        }
+
+        public TargetContainer this[string typeName]
         {
             get
             {
-                TargetContainer targetContainer;
-
-                Data.TryGetValue(key, out targetContainer);
-                return targetContainer;
-            }            
+                foreach(var entry in Data)
+                {
+                    if (entry.Key.name == typeName) 
+                        return entry.Value;
+                }
+                return null;
+            }
         }
 
         public int Count

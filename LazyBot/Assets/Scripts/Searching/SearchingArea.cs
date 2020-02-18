@@ -139,10 +139,11 @@ namespace LazyBot.Area.Searching
                     for (int j = 0; j < targets.Length; j++)
                     {
                         int k;
-                        LazyBot.Area.Detection.DetectionAreaContainer areas = targets[j].
+                        // Getting all detectionArea from current target
+                        LazyBot.Area.Detection.DetectionAreaContainer dAreas = targets[j].
                             GetComponent<LazyBot.Entity.EntityController>()?.DetectionAreas;
 
-                        foreach (var dArea in areas)
+                        foreach (var dArea in dAreas)
                         {                            
                             for (k = 0; k < _onTargetDetection.Length; k++)
                                 if (!_onTargetDetection[k].Validate(this, dArea)) break;

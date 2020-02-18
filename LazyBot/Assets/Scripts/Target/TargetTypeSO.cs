@@ -11,6 +11,10 @@ namespace LazyBot.Target.Property
     {
 #pragma warning disable 0649
         [SerializeField] private string _name;
+        /// <summary>
+        ///  We don't use checking the existence of these properties in EntityManager to prevent it's linking with TargetType.
+        /// </summary>
+        [Tooltip("Ids of target's properties which can be taken from the \"Entity manager\".\nDivided by \"/\" sign. Indices of wrong properties will return null.")]
         [SerializeField] private LazyBot.Entity.Data.IntMask _mask;
 
         [SerializeField] private bool _dataOnDetection;

@@ -398,17 +398,90 @@ namespace LazyBot.Entity
             _targets[area.TargetType].AddArea(area.Id);
         }
 
+        /// <summary>
+        /// More safe way of getting data from TargetInfo, then direct accessing through "Targets" property.
+        /// </summary>
+        /// <param name="targetType">Name of targets' type.</param>
+        /// <param name="getAllData">Is data, that wasn't got by default should be collected now.</param>
+        /// <returns>Container that contains all discovered targets.</returns>
+        public LazyBot.Target.Data.TargetInfo.TargetContainer GetTargets(string targetType, bool getAllData = true)
+        {
+            LazyBot.Target.Data.TargetInfo.TargetContainer  targetC = _targets[targetType];
+
+#if UNITY_EDITOR
+            if (targetC == null)
+            {
+                Debug.LogError("There is no such target type in this entity.", this);
+                return null;
+            }            
+#endif
+            if (getAllData)
+            {
+                foreach (var entry in targetC.Targets)
+                {
+                    for (int i = 0; i < entry.Value.Count; i++)
+                    {
+                        if (!entry.Value[i].IsFilled)
+                            entry.Value[i].FillData();
+                    }
+                }
+            }
+            
+            return targetC;
+        }
+
         public void AddTarget(LazyBot.Area.Searching.SearchingArea area, LazyBot.Area.Detection.DetectionArea detectionArea)
         {
             if (area.TargetType == null) return;
 
             AddTargetType(area.TargetType);
 
-            if (area.TargetType.DataOnDetection)// Fill data
-                _targets[area.TargetType].AddTarget(area.Id, 
-                    LazyBot.Manager.EntityManager.Instance.GetProperties(detectionArea.OwnerId, area.TargetType.Mask));
-            //else data will be filled on state execution
+            if (area.TargetType.DataOnDetection) // Filling data instantly
+                _targets[area.TargetType].AddTarget(
+                    area.Id,
+                    LazyBot.Manager.EntityManager.Instance.GetProperties(detectionArea.OwnerId, area.TargetType.Mask)
+                );
+            else // Data will be filled on state execution
+                _targets[area.TargetType].AddTarget(
+                    area.Id,
+                    () => {
+                        LazyBot.Manager.EntityManager.Instance.GetProperties(detectionArea.OwnerId, area.TargetType.Mask);
+                    }
+                );
         }
+
+        /// <summary>
+        /// More safe way of getting data from TargetInfo, then direct accessing through "Targets" property.
+        /// </summary>
+        /// <param name="targetType">Targets' type.</param>
+        /// <param name="getAllData">Is data, that wasn't got by default should be collected now.</param>
+        /// <returns>Container that contains all discovered targets.</returns>
+        public LazyBot.Target.Data.TargetInfo.TargetContainer GetTargets(LazyBot.Target.Property.TargetTypeSO targetType, bool getAllData = true)
+        {
+            LazyBot.Target.Data.TargetInfo.TargetContainer targetC = _targets[targetType];
+
+#if UNITY_EDITOR
+            if (targetC == null)
+            {
+                Debug.LogError("There is no such target type in this entity.", this);
+                return null;
+            }
+#endif
+            if (getAllData)
+            {
+                foreach (var entry in targetC.Targets)
+                {
+                    for (int i = 0; i < entry.Value.Count; i++)
+                    {
+                        if (!entry.Value[i].IsFilled)
+                            entry.Value[i].FillData();
+                    }
+                }
+            }
+
+            return targetC;
+        }
+        
 
         /// <summary>
         /// Runs custom method after delay.
